@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { X, ZoomIn } from 'lucide-react';
-import { GalleryItem } from '../types/erp';
-import { erpStorage } from '../services/erpStorage';
+import type { GalleryItem } from '../../shared/types';
+import { GALLERY } from '../content/gallery';
+import { TeamShowcase } from '../components/TeamShowcase';
 
 export const GalleryPage: React.FC = () => {
-  const galleryItems = erpStorage.getGallery();
+  const galleryItems = GALLERY;
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [activePhoto, setActivePhoto] = useState<GalleryItem | null>(null);
 
@@ -28,7 +29,7 @@ export const GalleryPage: React.FC = () => {
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <span className="text-[11px] font-bold uppercase tracking-wider text-[#2563D9] bg-[#EAF4FF] px-3 py-1 rounded-full border border-blue-100">
-          Cleanroom Facility Tour & R&D Gallery
+          Gallery / Facilities
         </span>
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#102A56]">
           Elim Table Water Media Gallery
@@ -38,6 +39,9 @@ export const GalleryPage: React.FC = () => {
           delivery fleet serving Abuja FCT.
         </p>
       </div>
+
+      {/* Management Staff, Brand Ambassador & Workforce */}
+      <TeamShowcase />
 
       {/* Category Filter Tabs */}
       <div className="flex items-center justify-center gap-2 overflow-x-auto pb-2">
@@ -70,7 +74,9 @@ export const GalleryPage: React.FC = () => {
                 alt={item.title}
                 loading="lazy"
                 referrerPolicy="no-referrer"
-                className="w-full h-full object-cover object-[center_20%] group-hover:scale-105 transition-transform duration-300"
+                className={`w-full h-full ${
+                  item.fitWhole ? 'object-contain' : 'object-cover object-[center_20%]'
+                } group-hover:scale-105 transition-transform duration-300`}
               />
               <span className="absolute top-3 left-3 bg-[#102A56]/90 backdrop-blur-xs text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-xs">
                 {item.category}

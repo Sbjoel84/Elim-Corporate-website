@@ -4,17 +4,15 @@ import {
   Phone,
   Mail,
   MapPin,
-  LayoutDashboard,
   ShieldCheck,
   Award,
   Menu,
   X,
   FileCheck2,
-  ChevronDown,
   ArrowRight,
   Globe,
 } from 'lucide-react';
-import { CartItem } from '../types/erp';
+import type { CartItem } from '../../shared/types';
 
 interface NavbarProps {
   currentTab: string;
@@ -22,8 +20,6 @@ interface NavbarProps {
   cartItems: CartItem[];
   onOpenCart: () => void;
   onOpenTracking: () => void;
-  onSwitchToAdmin: () => void;
-  isStaffMode: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -32,38 +28,18 @@ export const Navbar: React.FC<NavbarProps> = ({
   cartItems,
   onOpenCart,
   onOpenTracking,
-  onSwitchToAdmin,
-  isStaffMode,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const totalCartCount = cartItems.reduce((acc, curr) => acc + curr.quantity, 0);
 
+  // Every menu item goes straight to its page (no dropdowns).
   const navMenuItems = [
     { id: 'home', label: 'Home' },
-    {
-      id: 'company',
-      label: 'About Us',
-      target: 'about',
-      subItems: [
-        { id: 'about', label: 'Company Overview & Mission' },
-        { id: 'operations', label: 'Quality Standards & Lab' },
-        { id: 'gallery', label: 'Factory & Cleanroom Tour' },
-      ],
-    },
-    {
-      id: 'products',
-      label: 'Products',
-      target: 'products',
-      subItems: [
-        { id: 'products', label: 'All Water Products' },
-        { id: 'products', label: '19L Dispenser Jar Refills' },
-        { id: 'products', label: 'Bottled & Sachet Water' },
-      ],
-    },
+    { id: 'about', label: 'About Us' },
+    { id: 'products', label: 'Products' },
     { id: 'operations', label: 'Operations & Quality' },
-    { id: 'gallery', label: 'R&D / Facilities' },
+    { id: 'gallery', label: 'Gallery / Facilities' },
     { id: 'news', label: 'News & Press' },
     { id: 'contact', label: 'Contact' },
   ];
@@ -91,7 +67,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </span>
           </div>
 
-          {/* Right: Contact Hotline, Order Tracking, ERP Portal */}
+          {/* Right: Contact Hotline, Order Tracking */}
           <div className="flex items-center gap-4 ml-auto text-xs">
             <a
               href="tel:+2348166399794"
@@ -111,21 +87,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="hidden sm:inline">Track Order</span>
             </button>
 
-            <span className="text-slate-600 hidden sm:inline">|</span>
-
-            {/* Quick Access to ERP Staff Portal */}
-            <button
-              onClick={onSwitchToAdmin}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold transition cursor-pointer ${
-                isStaffMode
-                  ? 'bg-emerald-600 text-white shadow-xs'
-                  : 'bg-white/10 text-blue-200 hover:bg-[#2563D9] hover:text-white border border-white/15'
-              }`}
-              title="Toggle to Elim Water ERP Admin & Dispatch Control Centre"
-            >
-              <LayoutDashboard className="w-3 h-3" />
-              <span>{isStaffMode ? 'ERP Desk Active' : 'Staff / ERP Portal'}</span>
-            </button>
           </div>
         </div>
       </div>
@@ -148,52 +109,19 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Desktop Menu Links with Active Underline Bar */}
         <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
           {navMenuItems.map((item) => {
-            const hasSub = !!item.subItems && item.subItems.length > 0;
-            const targetId = item.target || item.id;
-            const isActive = currentTab === targetId || currentTab === item.id;
-
+            const isActive = currentTab === item.id;
             return (
-              <div
+              <button
                 key={item.id}
-                className="relative"
-                onMouseEnter={() => hasSub && setOpenDropdown(item.id)}
-                onMouseLeave={() => hasSub && setOpenDropdown(null)}
+                onClick={() => onNavigate(item.id)}
+                aria-current={isActive ? 'page' : undefined}
+                className={`relative px-3.5 py-2 text-[13px] xl:text-[14px] font-medium transition cursor-pointer ${
+                  isActive ? 'text-[#2563D9] font-semibold' : 'text-[#102A56] hover:text-[#2563D9]'
+                }`}
               >
-                <button
-                  onClick={() => {
-                    onNavigate(targetId);
-                  }}
-                  className={`relative px-3.5 py-2 text-[13px] xl:text-[14px] font-medium transition flex items-center gap-1 cursor-pointer ${
-                    isActive
-                      ? 'text-[#2563D9] font-semibold'
-                      : 'text-[#102A56] hover:text-[#2563D9]'
-                  }`}
-                >
-                  <span>{item.label}</span>
-                  {hasSub && <ChevronDown className="w-3.5 h-3.5 text-[#536174] mt-0.5" />}
-                  {isActive && (
-                    <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#2563D9] rounded-full"></span>
-                  )}
-                </button>
-
-                {/* Dropdown Menu */}
-                {hasSub && openDropdown === item.id && (
-                  <div className="absolute top-full left-0 w-60 bg-white border border-[#E1E8F0] rounded-xl shadow-lg py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                    {item.subItems?.map((sub, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => {
-                          onNavigate(sub.id);
-                          setOpenDropdown(null);
-                        }}
-                        className="w-full text-left px-4 py-2.5 text-xs font-medium text-[#536174] hover:bg-[#EAF4FF] hover:text-[#2563D9] transition cursor-pointer"
-                      >
-                        {sub.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+                {item.label}
+                {isActive && <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#2563D9] rounded-full"></span>}
+              </button>
             );
           })}
         </nav>
@@ -292,7 +220,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 currentTab === 'gallery' ? 'bg-[#EAF4FF] text-[#2563D9] font-semibold' : 'hover:bg-[#F5F7FA]'
               }`}
             >
-              R&D / Cleanroom Facilities
+              Gallery / Facilities
             </button>
             <button
               onClick={() => {
@@ -338,16 +266,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <FileCheck2 className="w-4 h-4 text-[#2563D9]" />
               Track Customer Order
-            </button>
-            <button
-              onClick={() => {
-                onSwitchToAdmin();
-                setMobileMenuOpen(false);
-              }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#102A56] text-blue-200 text-xs font-semibold rounded-lg"
-            >
-              <LayoutDashboard className="w-4 h-4" />
-              Open ERP Staff Management Desk
             </button>
           </div>
         </div>

@@ -17,15 +17,16 @@ import {
   ShieldCheck,
   Send,
 } from 'lucide-react';
-import { CartItem, CustomerInfo, DeliveryMethod, OnlineOrder } from '../types/erp';
-import { erpStorage } from '../services/erpStorage';
+import type { CartItem, CustomerInfo, DeliveryMethod, PublicOrder } from '../../shared/types';
+import { calculateDeliveryFee, DELIVERY_STATES, FACTORY_ADDRESS } from '../../shared/pricing';
+import { api, ApiError } from '../lib/api';
 
 interface CheckoutModalProps {
   isOpen: boolean;
   onClose: () => void;
   items: CartItem[];
   deliveryMethod: DeliveryMethod;
-  onOrderCompleted: (order: OnlineOrder) => void;
+  onOrderCompleted: (order: PublicOrder) => void;
   onTrackOrder: (orderRef: string, phone: string) => void;
 }
 
@@ -42,8 +43,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     phoneNumber: '',
     email: '',
     businessName: '',
-    deliveryAddress: deliveryMethod === 'FACTORY_COLLECTION' ? 'Plot No. 188A, FCDA Scheme Extension III, Off Bwari/Dutse Road, Kubw, FCT Abuja' : '',
-    cityArea: deliveryMethod === 'FACTORY_COLLECTION' ? 'Kubwa' : '',
+    deliveryAddress: '',
+    cityArea: '',
     state: 'Abuja',
     preferredDeliveryDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
     preferredDeliveryWindow: 'Morning (8:00 AM - 12:00 PM)',
@@ -52,19 +53,23 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [completedOrder, setCompletedOrder] = useState<OnlineOrder | null>(null);
+  const [completedOrder, setCompletedOrder] = useState<PublicOrder | null>(null);
   const [copiedRef, setCopiedRef] = useState(false);
-  const [stockCheckResult, setStockCheckResult] = useState<{
-    allAvailable: boolean;
-    issues: { productId: string; productName: string; requested: number; available: number }[];
-  } | null>(null);
+  const [errorMsg, setErrorMsg] = useState('');
 
   if (!isOpen) return null;
 
-  // Calculate official server prices
+  // Estimate only: the server recalculates prices and fees from the catalogue.
   const subtotal = items.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
-  const deliveryFee = deliveryMethod === 'DELIVERY' ? (subtotal > 150000 ? 0 : 4000) : 0;
+  const deliveryFee = calculateDeliveryFee(subtotal, deliveryMethod);
   const totalAmount = subtotal + deliveryFee;
+  const todayIso = new Date().toISOString().split('T')[0];
+
+  const handleClose = () => {
+    setCompletedOrder(null);
+    setErrorMsg('');
+    onClose();
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -74,51 +79,34 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMsg('');
 
     if (!formData.fullName.trim() || !formData.phoneNumber.trim()) {
-      alert('Please provide your full name and phone number.');
+      setErrorMsg('Please provide your full name and phone number.');
       return;
     }
-
     if (deliveryMethod === 'DELIVERY' && !formData.deliveryAddress.trim()) {
-      alert('Please provide a delivery address for fleet dispatch.');
-      return;
-    }
-
-    // Step 1: Pre-verify against ERP finished goods inventory
-    const check = erpStorage.checkStockAvailability(
-      items.map((i) => ({ productId: i.productId, quantity: i.quantity }))
-    );
-
-    if (!check.allAvailable && !stockCheckResult) {
-      setStockCheckResult(check);
+      setErrorMsg('Please provide a delivery address.');
       return;
     }
 
     setIsSubmitting(true);
-
-    setTimeout(() => {
-      try {
-        const order = erpStorage.createOnlineOrder({
-          customer: {
-            ...formData,
-            deliveryMethod,
-          },
-          items,
-          deliveryFee,
-        });
-
-        setCompletedOrder(order);
-        onOrderCompleted(order);
-      } catch (err) {
-        console.error('Order creation failed:', err);
-        alert('Failed to place booking. Please try again.');
-      } finally {
-        setIsSubmitting(false);
-      }
-    }, 600);
+    try {
+      const order = await api.createOrder({
+        customer: { ...formData, deliveryMethod },
+        items: items.map((i) => ({ productId: i.productId, variantId: i.variantId, quantity: i.quantity })),
+      });
+      setCompletedOrder(order);
+      onOrderCompleted(order);
+    } catch (err) {
+      setErrorMsg(
+        err instanceof ApiError ? err.message : 'We could not place your booking. Please try again.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const copyOrderRef = () => {
@@ -136,7 +124,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        onClick={!completedOrder ? onClose : undefined}
+        onClick={!completedOrder ? handleClose : undefined}
         className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
       />
 
@@ -154,13 +142,14 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               </h3>
               <p className="text-xs text-white/80">
                 {completedOrder
-                  ? 'Your order is registered in our ERP queue'
+                  ? 'Your booking has been sent to our order desk'
                   : 'Fast, secure online booking direct to factory desk'}
               </p>
             </div>
           </div>
           <button
-            onClick={onClose}
+            onClick={handleClose}
+            aria-label="Close"
             className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer"
           >
             <X className="w-5 h-5" />
@@ -178,14 +167,14 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
-                  Successfully Submitted to ERP
+                  Booking Received
                 </span>
                 <h4 className="text-2xl font-black text-slate-900 mt-2">
                   Thank You, {completedOrder.customer.fullName}!
                 </h4>
                 <p className="text-sm text-slate-600 max-w-md mx-auto mt-1">
-                  Your water booking has been received and automatically assigned to our Senior Order
-                  Desk Manager (<strong>{completedOrder.assignedStaffName || 'Folake Adeyemi'}</strong>).
+                  Your water booking has been received. Our order desk will call you to confirm
+                  availability and delivery timing.
                 </p>
               </div>
 
@@ -269,7 +258,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 <button
                   onClick={() => {
                     onTrackOrder(completedOrder.orderReference, completedOrder.customer.phoneNumber);
-                    onClose();
+                    handleClose();
                   }}
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition cursor-pointer"
                 >
@@ -289,29 +278,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
           ) : (
             /* Checkout Form */
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Stock Warning Notice if requested qty exceeds current free stock */}
-              {stockCheckResult && !stockCheckResult.allAvailable && (
-                <div className="bg-amber-50 border border-amber-300 rounded-xl p-4 text-xs text-amber-900 space-y-2">
-                  <div className="flex items-center gap-2 font-bold text-amber-950">
-                    <AlertTriangle className="w-4 h-4 text-amber-600" />
-                    <span>High Quantity Alert / High Factory Demand</span>
-                  </div>
-                  <p>
-                    Some items in your cart exceed immediate off-the-shelf ready stock. Our factory
-                    production line may schedule a fresh bottling run before dispatch:
-                  </p>
-                  <ul className="list-disc list-inside space-y-0.5">
-                    {stockCheckResult.issues.map((iss) => (
-                      <li key={iss.productId}>
-                        <strong>{iss.productName}</strong>: Requested {iss.requested}, currently ready in
-                        warehouse: {iss.available} units.
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="font-semibold text-amber-950 pt-1">
-                    You can still submit your booking! Our assigned order officer will contact you with the
-                    exact batch production window.
-                  </p>
+              {errorMsg && (
+                <div role="alert" className="bg-rose-50 border border-rose-200 rounded-xl p-3.5 text-xs text-rose-800 flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                  <span>{errorMsg}</span>
                 </div>
               )}
 
@@ -435,11 +405,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                           onChange={handleInputChange}
                           className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none bg-white"
                         >
-                          <option value="Abuja">Abuja FCT</option>
-                          <option value="Niger">Niger State (Suleja / Madalla)</option>
-                          <option value="Nasarawa">Nasarawa State</option>
-                          <option value="Kaduna">Kaduna State</option>
-                          <option value="Lagos">Lagos State</option>
+                          {DELIVERY_STATES.map((st) => (
+                            <option key={st.value} value={st.value}>
+                              {st.label}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
@@ -447,7 +417,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 ) : (
                   <div className="bg-slate-50 border border-slate-200 p-3 rounded-xl text-xs text-slate-700 space-y-1">
                     <p className="font-semibold text-slate-900">
-                      Collection Point: Plot No. 188A, FCDA Scheme Extension III, Off Bwari/Dutse Road, By Power Station, Opp. KAS Guest House, Kubw, FCT Abuja.
+                      Collection Point: {FACTORY_ADDRESS}.
                     </p>
                     <p className="text-slate-500">
                       Our factory loading bay crew will assist loading your vehicle directly from our cleanroom warehouse upon presenting your Order Reference.
@@ -463,6 +433,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     <input
                       type="date"
                       name="preferredDeliveryDate"
+                      min={todayIso}
+                      required
                       value={formData.preferredDeliveryDate}
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none"
@@ -523,7 +495,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <div className="flex items-center justify-end gap-3 pt-2">
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={handleClose}
                   className="px-4 py-2.5 text-xs font-semibold text-[#536174] hover:text-[#102A56] hover:bg-slate-100 rounded-lg transition cursor-pointer"
                 >
                   Cancel
@@ -534,7 +506,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   className="flex items-center gap-2 px-6 py-2.5 bg-[#2563D9] hover:bg-[#1D4ED8] text-white font-semibold text-xs rounded-lg shadow-sm transition disabled:opacity-50 cursor-pointer"
                 >
                   {isSubmitting ? (
-                    <span>Registering with ERP...</span>
+                    <span>Sending booking...</span>
                   ) : (
                     <>
                       <span>Submit Booking</span>

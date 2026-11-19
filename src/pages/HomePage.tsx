@@ -23,9 +23,8 @@ import {
   HeartHandshake,
   Check,
 } from 'lucide-react';
-import { Product, ProductVariant } from '../types/erp';
+import type { Product, ProductVariant } from '../../shared/types';
 import { ProductCard } from '../components/ProductCard';
-import { CustomerTestimonials } from '../components/CustomerTestimonials';
 import { HeroProductShowcase } from '../components/HeroProductShowcase';
 import regenerated500mlWaterImg from '../assets/images/regenerated_image_1794001325740.jpg';
 import regenerated750mlWaterImg from '../assets/images/regenerated_image_1794001482217.jpg';
@@ -514,9 +513,6 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* ================= CUSTOMER TESTIMONIALS (Recent Verified Feedback) ================= */}
-      <CustomerTestimonials />
-
       {/* ================= SECTION 6: HORIZONTAL CTA BANNER (Partner With Us) ================= */}
       <section className="w-full py-10 px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 bg-[#F5F7FA] border-t border-[#E1E8F0]">
         <div className="w-full rounded-2xl bg-[#102A56] p-6 sm:p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-md">
@@ -615,9 +611,9 @@ export const HomePage: React.FC<HomePageProps> = ({
             {quickSubmitted ? (
               <div className="p-8 text-center space-y-3">
                 <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
-                <h4 className="text-base font-bold text-[#102A56]">Added to Cart & Dispatched to ERP!</h4>
+                <h4 className="text-base font-bold text-[#102A56]">Added to Your Cart</h4>
                 <p className="text-xs text-[#536174]">
-                  Our dispatch officers at Kubwa plant have received your order request.
+                  Open your cart and complete checkout to send your booking to our order desk.
                 </p>
               </div>
             ) : (

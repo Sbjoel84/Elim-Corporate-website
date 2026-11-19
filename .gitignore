@@ -6,3 +6,7 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Server output and local order/enquiry data
+dist-server/
+data/

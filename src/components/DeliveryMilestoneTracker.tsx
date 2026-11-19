@@ -8,7 +8,7 @@ import {
   AlertTriangle,
   Clock,
 } from 'lucide-react';
-import { OnlineOrder, OrderStatus } from '../types/erp';
+import type { OrderStatus, PublicOrder } from '../../shared/types';
 
 interface MilestoneDefinition {
   key: 'received' | 'processing' | 'quality' | 'transit' | 'delivered';
@@ -75,7 +75,7 @@ function formatShortTime(iso?: string): string | null {
 }
 
 interface DeliveryMilestoneTrackerProps {
-  order: OnlineOrder;
+  order: PublicOrder;
 }
 
 export const DeliveryMilestoneTracker: React.FC<DeliveryMilestoneTrackerProps> = ({ order }) => {
@@ -291,7 +291,7 @@ export const DeliveryMilestoneTracker: React.FC<DeliveryMilestoneTrackerProps> =
               </span>
             </p>
             <p className="text-[10px] text-[#536174] mt-0.5">
-              Updated by {latestHistoryNote.changedBy} •{' '}
+              Updated{' '}
               {formatShortTime(latestHistoryNote.changedAt)}
             </p>
           </div>

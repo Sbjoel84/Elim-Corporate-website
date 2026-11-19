@@ -149,7 +149,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={() => onNavigate('gallery')}
                   className="hover:text-[#2563D9] transition cursor-pointer"
                 >
-                  R&D Facilities
+                  Gallery / Facilities
                 </button>
               </li>
               <li>

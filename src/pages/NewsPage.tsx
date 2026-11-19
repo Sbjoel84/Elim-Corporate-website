@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Calendar, ArrowRight, X } from 'lucide-react';
-import { NewsAnnouncement } from '../types/erp';
-import { erpStorage } from '../services/erpStorage';
+import type { NewsAnnouncement } from '../../shared/types';
+import { NEWS } from '../content/news';
 
 export const NewsPage: React.FC = () => {
-  const newsList = erpStorage.getNews().filter((n) => n.published);
+  const newsList = NEWS.filter((n) => n.published);
   const [selectedNews, setSelectedNews] = useState<NewsAnnouncement | null>(null);
 
   return (

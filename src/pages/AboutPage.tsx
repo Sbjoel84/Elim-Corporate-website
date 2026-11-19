@@ -1,5 +1,6 @@
 import React from 'react';
-import { ShieldCheck, Award, HeartHandshake, Eye, Target, CheckCircle2, Users, ArrowRight, Check } from 'lucide-react';
+import { ShieldCheck, Award, ArrowRight } from 'lucide-react';
+import { CompanyProfile, ServicesAndLocation } from '../components/AboutSections';
 import { FAQSection } from '../components/FAQSection';
 
 interface AboutPageProps {
@@ -88,210 +89,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
             </div>
           </div>
         </div>
-
-        {/* Enlarged Showcase Grid: Management Staff, Brand Ambassador & Full-Width Workforce */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Management Staff */}
-          <div className="bg-white rounded-2xl border border-[#E1E8F0] overflow-hidden shadow-2xs hover:shadow-md transition-shadow group flex flex-col">
-            <div className="relative h-[320px] sm:h-[400px] lg:h-[460px] overflow-hidden bg-slate-100">
-              <img
-                src="/assets/aistudio/ESS07808-_952f4c20.jpg"
-                alt="Elim Table Water Management Staff"
-                className="w-full h-full object-cover object-top group-hover:scale-103 transition-transform duration-300"
-              />
-              <span className="absolute top-4 left-4 bg-[#102A56]/90 backdrop-blur-xs text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
-                Management Staff
-              </span>
-            </div>
-            <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-3">
-              <div>
-                <h3 className="text-xl font-bold text-[#102A56]">Plant Management Team</h3>
-                <p className="text-xs font-medium text-[#2563D9] mb-2">
-                  Supervisors, QA Leads & Operations Heads
-                </p>
-                <p className="text-sm text-[#536174] leading-relaxed">
-                  Experienced departmental managers coordinating daily purification cycles, laboratory audits,
-                  ERP order routing, and dispatch fleet schedules for uninterrupted plant output.
-                </p>
-              </div>
-              <div className="pt-3 border-t border-[#E1E8F0] flex items-center justify-between text-xs text-[#536174]">
-                <span>Operations & QA Governance</span>
-                <span className="font-semibold text-[#2563D9]">Senior Supervisors</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Brand Ambassador */}
-          <div className="bg-white rounded-2xl border border-[#E1E8F0] overflow-hidden shadow-2xs hover:shadow-md transition-shadow group flex flex-col">
-            <div className="relative h-[340px] sm:h-[400px] lg:h-[460px] overflow-hidden bg-slate-100">
-              <img
-                src="/assets/aistudio/ESS07846_ecabbb34.jpg"
-                alt="Elim Table Water Official Brand Ambassador"
-                className="w-full h-full object-cover object-top group-hover:scale-103 transition-transform duration-300"
-              />
-              <span className="absolute top-4 left-4 bg-emerald-700/90 backdrop-blur-xs text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
-                Brand Ambassador
-              </span>
-            </div>
-            <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-3">
-              <div>
-                <h3 className="text-xl font-bold text-[#102A56]">Official Brand Ambassador</h3>
-                <p className="text-xs font-medium text-[#2563D9] mb-2">
-                  Quality Advocacy & Community Outreach
-                </p>
-                <p className="text-sm text-[#536174] leading-relaxed">
-                  Championing healthy hydration habits and representing Elim Table Water’s 18.9L dispenser,
-                  bottled, and sachet ranges across homes, corporate events, and community initiatives.
-                </p>
-              </div>
-              <div className="pt-3 border-t border-[#E1E8F0] flex items-center justify-between text-xs text-[#536174]">
-                <span>Pure Natural Healthy Water</span>
-                <span className="font-semibold text-[#2563D9]">Brand Voice</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Team Members / Staff at All Levels (Full-Width Enlarged Banner Card) */}
-          <div className="lg:col-span-2 bg-white rounded-2xl border border-[#E1E8F0] overflow-hidden shadow-2xs hover:shadow-md transition-shadow group flex flex-col">
-            <div className="relative h-[280px] sm:h-[420px] lg:h-[520px] overflow-hidden bg-slate-100">
-              <img
-                src="/assets/aistudio/ESS07806_7a78374e.jpg"
-                alt="Elim Table Water Team Members and Staff at All Levels"
-                className="w-full h-full object-cover object-[center_55%] group-hover:scale-102 transition-transform duration-300"
-              />
-              <span className="absolute top-4 left-4 bg-[#2563D9]/90 backdrop-blur-xs text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
-                All-Level Workforce
-              </span>
-            </div>
-            <div className="p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="space-y-1.5 max-w-3xl">
-                <h3 className="text-xl font-bold text-[#102A56]">Team Members & Staff at All Levels</h3>
-                <p className="text-xs font-medium text-[#2563D9]">
-                  Production, Packaging, Logistics & Support
-                </p>
-                <p className="text-sm text-[#536174] leading-relaxed">
-                  Our united workforce across cleanroom bottling, sachet packaging, hygiene inspection,
-                  inventory management, and customer fleet delivery working together as one family.
-                </p>
-              </div>
-              <div className="flex sm:flex-col items-center sm:items-end justify-between gap-2 shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-[#E1E8F0] text-xs text-[#536174]">
-                <span>Plant-Wide Personnel</span>
-                <span className="font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
-                  United Workforce
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
 
-      {/* Story & Background */}
-      <section className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-5">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#2563D9] bg-[#EAF4FF] px-3 py-1 rounded-full">
-              Pioneering Industrial Hydration
-            </span>
-            <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-bold text-[#102A56] leading-tight">
-              From a Vision of Wholesome Purity to an Ultra-Modern Bottling Complex
-            </h2>
-            <p className="text-sm text-[#536174] leading-relaxed">
-              Established with an unshakeable dedication to public health, Elim Table Water started operations
-              with a simple mandate: produce drinking water that meets the most stringent international
-              standards without compromising on crisp natural mineral taste.
-            </p>
-            <p className="text-sm text-[#536174] leading-relaxed">
-              Today, Elim operates an advanced production facility at Plot No. 188A, FCDA Scheme Extension III,
-              Kubwa, Abuja, powered by multi-barrier industrial reverse osmosis (RO), ultraviolet microbial eradication,
-              and ozone stabilization. Tens of thousands of bottles and sachet bundles leave our loading bays daily.
-            </p>
-            <div className="grid grid-cols-2 gap-4 pt-2">
-              <div className="border border-[#E1E8F0] p-4 rounded-xl bg-[#F5F7FA]">
-                <span className="text-2xl font-bold text-[#2563D9] block">100%</span>
-                <span className="text-xs text-[#536174] font-medium">Bacteriologically Sterile</span>
-              </div>
-              <div className="border border-[#E1E8F0] p-4 rounded-xl bg-[#F5F7FA]">
-                <span className="text-2xl font-bold text-[#2563D9] block">ISO 9001</span>
-                <span className="text-xs text-[#536174] font-medium">Certified Quality System</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="rounded-2xl overflow-hidden shadow-md border border-[#E1E8F0] aspect-4/3 group">
-              <img
-                src="/assets/aistudio/productsqw_4491fc0b.jpeg"
-                alt="Elim Table Water Plant & Staff Headquarters"
-                className="w-full h-full object-cover object-center group-hover:scale-102 transition duration-300"
-              />
-              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white">
-                <p className="text-xs font-bold">Elim Table Water Plant Headquarters</p>
-                <p className="text-[11px] text-slate-200">Executive management, fleet operators & plant team at Kubwa facility</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Mission, Vision & Core Values */}
-      <section className="bg-[#F5F7FA] py-16 border-y border-[#E1E8F0]">
-        <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 space-y-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-8 rounded-2xl border border-[#E1E8F0] shadow-2xs space-y-3">
-              <div className="w-12 h-12 rounded-xl bg-[#2563D9] text-white flex items-center justify-center">
-                <Target className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-[#102A56]">Our Mission</h3>
-              <p className="text-sm text-[#536174] leading-relaxed">
-                To guarantee uncompromised hydration safety for every home and organization by employing
-                cutting-edge industrial purification and customer-first doorstep delivery logistics.
-              </p>
-            </div>
-
-            <div className="bg-white p-8 rounded-2xl border border-[#E1E8F0] shadow-2xs space-y-3">
-              <div className="w-12 h-12 rounded-xl bg-[#102A56] text-white flex items-center justify-center">
-                <Eye className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-[#102A56]">Our Vision</h3>
-              <p className="text-sm text-[#536174] leading-relaxed">
-                To be West Africa's benchmark drinking water manufacturing enterprise, recognized
-                for purity, environmental responsibility, and innovative ERP-driven distribution.
-              </p>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#102A56] text-center mb-8">
-              Core Principles Guiding Our Plant Operations
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-2xl border border-[#E1E8F0] shadow-2xs space-y-2">
-                <ShieldCheck className="w-8 h-8 text-[#2563D9]" />
-                <h4 className="text-base font-bold text-[#102A56]">Zero Compromise on Purity</h4>
-                <p className="text-xs text-[#536174] leading-relaxed">
-                  We adhere strictly to NAFDAC, SON, and WHO water guidelines with 30-minute lab testing cycles.
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-2xl border border-[#E1E8F0] shadow-2xs space-y-2">
-                <HeartHandshake className="w-8 h-8 text-[#2563D9]" />
-                <h4 className="text-base font-bold text-[#102A56]">Customer Reliability</h4>
-                <p className="text-xs text-[#536174] leading-relaxed">
-                  Whether 1 pack or 500 dispenser refills, our fleet delivers on time, every time across Abuja.
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-2xl border border-[#E1E8F0] shadow-2xs space-y-2">
-                <Award className="w-8 h-8 text-[#2563D9]" />
-                <h4 className="text-base font-bold text-[#102A56]">Continuous Innovation</h4>
-                <p className="text-xs text-[#536174] leading-relaxed">
-                  Investing in modern automated bottling lines, digital ERP order processing, and eco-friendly packaging.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CompanyProfile />
 
       {/* Our People & Plant Departments (Authentic Team, Production & Warehouse) */}
       <section className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 py-16 space-y-8">
@@ -394,6 +194,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
           </div>
         </div>
       </section>
+
+      <ServicesAndLocation />
 
       {/* FAQ Accordion Section */}
       <FAQSection />

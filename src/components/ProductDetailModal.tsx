@@ -11,7 +11,8 @@ import {
   RotateCcw,
   Sparkles,
 } from 'lucide-react';
-import { Product, ProductVariant } from '../types/erp';
+import type { Product, ProductVariant } from '../../shared/types';
+import { AVAILABILITY_BADGE } from '../lib/availability';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -33,7 +34,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
 
-  const availableStock = Math.max(0, product.currentStock - product.reservedStock);
+  const availability = AVAILABILITY_BADGE[product.availability] ?? AVAILABILITY_BADGE.IN_STOCK;
 
   const handleAdd = () => {
     onAddToCart(product, selectedVariant, quantity);
@@ -175,11 +176,11 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 </div>
               )}
 
-              {/* Factory Stock Verification Info */}
+              {/* Availability */}
               <div className="flex items-center gap-2 text-xs text-[#536174]">
-                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span className={`w-2 h-2 rounded-full ${availability.dot}`}></span>
                 <span>
-                  Factory Finished Goods: <strong className="text-[#102A56]">{availableStock} units ready for dispatch</strong>
+                  Availability: <strong className="text-[#102A56]">{availability.label}</strong>
                 </span>
               </div>
             </div>

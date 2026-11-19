@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShoppingCart, Eye, Check, Package, ArrowRight } from 'lucide-react';
-import { Product, ProductVariant } from '../types/erp';
+import type { Product, ProductVariant } from '../../shared/types';
+import { AVAILABILITY_BADGE } from '../lib/availability';
 
 interface ProductCardProps {
   product: Product;
@@ -19,23 +20,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const [quantity, setQuantity] = useState(1);
   const [addedAnimation, setAddedAnimation] = useState(false);
 
-  const availableStock = Math.max(0, product.currentStock - product.reservedStock);
-
-  let stockStatusBadge = {
-    label: 'In Stock',
-    className: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  };
-  if (availableStock === 0) {
-    stockStatusBadge = {
-      label: 'Produced on Order',
-      className: 'bg-blue-50 text-blue-700 border-blue-200',
-    };
-  } else if (availableStock < product.minReorderLevel) {
-    stockStatusBadge = {
-      label: 'Limited Stock',
-      className: 'bg-amber-50 text-amber-700 border-amber-200',
-    };
-  }
+  const stockStatusBadge = AVAILABILITY_BADGE[product.availability] ?? AVAILABILITY_BADGE.IN_STOCK;
 
   const handleAdd = () => {
     onAddToCart(product, selectedVariant, quantity);

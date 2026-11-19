@@ -13,8 +13,6 @@ import {
   Microscope,
 } from 'lucide-react';
 import qualityLabImg from '../assets/images/regenerated_image_1794341640142.jpg';
-import warehouseHallImg from '../assets/images/warehouse_hall_elim_1794343296862.jpg';
-import palletCargoTrikeImg from '../assets/images/pallet_depot_elim_1794343295822.jpg';
 import fleetLoadingBayImg from '../assets/images/fleet_dock_elim_1794343294832.jpg';
 import rollerConveyorPackingImg from '../assets/images/roller_packing_elim_1794343294116.jpg';
 
@@ -212,7 +210,7 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
             <div className="bg-[#F5F7FA] rounded-2xl border border-[#E1E8F0] overflow-hidden shadow-2xs hover:shadow-md transition duration-200 flex flex-col group">
               <div className="relative aspect-4/3 overflow-hidden bg-slate-200">
                 <img
-                  src={warehouseHallImg}
+                  src="/assets/aistudio/ESS07859_0a5e6882.jpg"
                   alt="Elim Table Water Climate-Controlled Warehouse Hall"
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                   loading="lazy"
@@ -251,7 +249,7 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
             <div className="bg-[#F5F7FA] rounded-2xl border border-[#E1E8F0] overflow-hidden shadow-2xs hover:shadow-md transition duration-200 flex flex-col group">
               <div className="relative aspect-4/3 overflow-hidden bg-slate-200">
                 <img
-                  src={palletCargoTrikeImg}
+                  src="/assets/aistudio/ESS07880_83ec7ec6.jpg"
                   alt="Palletized Finished Goods Depot & Huaihai Fleet Hauler"
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                   loading="lazy"

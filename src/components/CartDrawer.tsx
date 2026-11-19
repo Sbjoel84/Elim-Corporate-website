@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, Truck, Store, AlertCircle } from 'lucide-react';
-import { CartItem, DeliveryMethod } from '../types/erp';
+import type { CartItem, DeliveryMethod } from '../../shared/types';
+import { calculateDeliveryFee, FREE_DELIVERY_THRESHOLD } from '../../shared/pricing';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -26,7 +27,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   if (!isOpen) return null;
 
   const subtotal = items.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
-  const deliveryFee = deliveryMethod === 'DELIVERY' ? (subtotal > 150000 ? 0 : 4000) : 0;
+  const deliveryFee = calculateDeliveryFee(subtotal, deliveryMethod);
   const total = subtotal + deliveryFee;
 
   return (
@@ -200,9 +201,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     : `₦${deliveryFee.toLocaleString()}`}
                 </span>
               </div>
-              {deliveryMethod === 'DELIVERY' && subtotal < 150000 && (
+              {deliveryMethod === 'DELIVERY' && subtotal < FREE_DELIVERY_THRESHOLD && (
                 <p className="text-[11px] text-[#2563D9]">
-                  💡 Tip: Orders above ₦150,000 qualify for free factory fleet delivery!
+                  💡 Tip: Orders of ₦{FREE_DELIVERY_THRESHOLD.toLocaleString()} and above qualify for free factory fleet delivery!
                 </p>
               )}
               <div className="pt-2 border-t border-[#E1E8F0] flex justify-between text-sm font-bold text-[#102A56]">

@@ -1,402 +1,226 @@
-import React, { useState, useEffect } from 'react';
-import { erpStorage } from './services/erpStorage';
-import {
-  Product,
-  OnlineOrder,
-  StaffMember,
-  Vehicle,
-  DispatchRecord,
-  CustomerInquiry,
-  CartItem,
-  DeliveryMethod,
-  ProductVariant,
-} from './types/erp';
+import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react';
+import { Route, Routes, useLocation, useNavigate } from 'react-router';
+import type { CartItem, DeliveryMethod, Product, ProductVariant } from '../shared/types';
+import { api } from './lib/api';
+import { PAGES, pathForPage, pageForPath } from './lib/pages';
 
-// Customer Components & Pages
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { OrderTrackingModal } from './components/OrderTrackingModal';
-
 import { HomePage } from './pages/HomePage';
-import { AboutPage } from './pages/AboutPage';
-import { OperationsPage } from './pages/OperationsPage';
-import { ProductsPage } from './pages/ProductsPage';
-import { NewsPage } from './pages/NewsPage';
-import { GalleryPage } from './pages/GalleryPage';
-import { ContactPage } from './pages/ContactPage';
 
-// Admin ERP Components
-import { AdminLayout } from './admin/AdminLayout';
-import { AdminDashboard } from './admin/AdminDashboard';
-import { OrderInbox } from './admin/OrderInbox';
-import { OrderDetailDrawer } from './admin/OrderDetailDrawer';
-import { DispatchManagement } from './admin/DispatchManagement';
-import { StaffWorkspace } from './admin/StaffWorkspace';
-import { ErpInventoryLedger } from './admin/ErpInventoryLedger';
-import { InquiriesAdmin } from './admin/InquiriesAdmin';
-import { ContentAdmin } from './admin/ContentAdmin';
-import { AuditLogsAdmin } from './admin/AuditLogsAdmin';
+// Other pages are downloaded only when visited, to keep the first load small.
+const AboutPage = lazy(() => import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })));
+const OperationsPage = lazy(() => import('./pages/OperationsPage').then((m) => ({ default: m.OperationsPage })));
+const ProductsPage = lazy(() => import('./pages/ProductsPage').then((m) => ({ default: m.ProductsPage })));
+const NewsPage = lazy(() => import('./pages/NewsPage').then((m) => ({ default: m.NewsPage })));
+const GalleryPage = lazy(() => import('./pages/GalleryPage').then((m) => ({ default: m.GalleryPage })));
+const ContactPage = lazy(() => import('./pages/ContactPage').then((m) => ({ default: m.ContactPage })));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
+
+const CART_KEY = 'elim_water_cart';
+
+function loadCart(): CartItem[] {
+  try {
+    const saved = localStorage.getItem(CART_KEY);
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+}
 
 export default function App() {
-  // Navigation State
-  const [isAdminMode, setIsAdminMode] = useState(false);
-  const [currentPublicTab, setCurrentPublicTab] = useState('home');
-  const [currentAdminTab, setCurrentAdminTab] = useState('dashboard');
+  const location = useLocation();
+  const navigate = useNavigate();
+  const currentPage = pageForPath(location.pathname);
 
-  // ERP Authoritative Data
+  const goTo = useCallback((page: string) => navigate(pathForPage(page)), [navigate]);
+
+  // Page title, description and scroll position on every page change.
+  useEffect(() => {
+    const meta = PAGES[currentPage ?? 'notFound'];
+    document.title = meta.title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description);
+    window.scrollTo({ top: 0 });
+  }, [currentPage, location.pathname]);
+
+  // Product catalogue from the server (which gets it from the ERP).
   const [products, setProducts] = useState<Product[]>([]);
-  const [orders, setOrders] = useState<OnlineOrder[]>([]);
-  const [staff, setStaff] = useState<StaffMember[]>([]);
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [dispatches, setDispatches] = useState<DispatchRecord[]>([]);
-  const [inquiries, setInquiries] = useState<CustomerInquiry[]>([]);
+  const [productsError, setProductsError] = useState('');
 
-  // Active Operator (Defaults to Folake Adeyemi, the designated Senior Order Desk & Fulfillment Coordinator)
-  const [activeStaff, setActiveStaff] = useState<StaffMember | null>(null);
+  useEffect(() => {
+    api
+      .getProducts()
+      .then((list) => {
+        setProducts(list);
+        setProductsError('');
+      })
+      .catch(() => setProductsError('We could not load our product list. Please refresh the page.'));
+  }, []);
 
-  // Cart & Booking
-  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
-    try {
-      const saved = localStorage.getItem('elim_water_cart');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  // Cart (remembered in this browser only)
+  const [cartItems, setCartItems] = useState<CartItem[]>(loadCart);
   const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>('DELIVERY');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
-  // Modals & Drawers
-  const [selectedProductForDetail, setSelectedProductForDetail] = useState<Product | null>(null);
-  const [selectedOrderForDetail, setSelectedOrderForDetail] = useState<OnlineOrder | null>(null);
-  const [targetOrderForDispatch, setTargetOrderForDispatch] = useState<OnlineOrder | null>(null);
+  useEffect(() => {
+    try {
+      localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
+    } catch {
+      // storage unavailable (private mode); the cart still works for this visit
+    }
+  }, [cartItems]);
 
-  // Tracking Modal
+  // When the catalogue loads, drop cart lines that no longer exist and refresh prices.
+  useEffect(() => {
+    if (products.length === 0) return;
+    setCartItems((prev) =>
+      prev.flatMap((item) => {
+        const variant = products
+          .find((p) => p.id === item.productId)
+          ?.variants.find((v) => v.id === item.variantId);
+        return variant ? [{ ...item, unitPrice: variant.price }] : [];
+      })
+    );
+  }, [products]);
+
+  // Modals
+  const [selectedProductForDetail, setSelectedProductForDetail] = useState<Product | null>(null);
   const [isTrackingModalOpen, setIsTrackingModalOpen] = useState(false);
   const [trackingInitialRef, setTrackingInitialRef] = useState('');
   const [trackingInitialPhone, setTrackingInitialPhone] = useState('');
 
-  // Initial Load & Reactive Subscription
-  const loadErpData = () => {
-    const p = erpStorage.getProducts();
-    const o = erpStorage.getOrders();
-    const s = erpStorage.getStaff();
-    const v = erpStorage.getVehicles();
-    const d = erpStorage.getDispatches();
-    const inq = erpStorage.getInquiries();
-
-    setProducts(p);
-    setOrders(o);
-    setStaff(s);
-    setVehicles(v);
-    setDispatches(d);
-    setInquiries(inq);
-
-    // Default to Folake Adeyemi if not set
-    if (!activeStaff && s.length > 0) {
-      const folake = s.find((st) => st.name.includes('Folake')) || s[0];
-      setActiveStaff(folake);
-    }
-  };
-
-  useEffect(() => {
-    loadErpData();
-
-    const handleUpdate = () => {
-      loadErpData();
-    };
-
-    window.addEventListener('elim_erp_updated', handleUpdate);
-    return () => window.removeEventListener('elim_erp_updated', handleUpdate);
-  }, []);
-
-  // Save Cart to Local Storage
-  useEffect(() => {
-    try {
-      localStorage.setItem('elim_water_cart', JSON.stringify(cartItems));
-    } catch {
-      // ignore
-    }
-  }, [cartItems]);
-
-  // Cart Operations
   const handleAddToCart = (product: Product, variant: ProductVariant, quantity: number) => {
     setCartItems((prev) => {
-      const existingIdx = prev.findIndex(
-        (i) => i.productId === product.id && i.variantId === variant.id
-      );
-
-      if (existingIdx > -1) {
-        const copy = [...prev];
-        copy[existingIdx].quantity += quantity;
-        return copy;
-      } else {
-        return [
-          ...prev,
-          {
-            productId: product.id,
-            variantId: variant.id,
-            quantity,
-            unitPrice: variant.price,
-            productName: product.name,
-            variantName: variant.name,
-            packaging: variant.packaging,
-            image: product.image,
-          },
-        ];
+      const existing = prev.find((i) => i.productId === product.id && i.variantId === variant.id);
+      if (existing) {
+        return prev.map((i) => (i === existing ? { ...i, quantity: i.quantity + quantity } : i));
       }
+      return [
+        ...prev,
+        {
+          productId: product.id,
+          variantId: variant.id,
+          quantity,
+          unitPrice: variant.price,
+          productName: product.name,
+          variantName: variant.name,
+          packaging: variant.packaging,
+          image: product.image,
+        },
+      ];
     });
-
     setIsCartOpen(true);
   };
 
-  const handleUpdateCartQty = (productId: string, variantId: string, newQty: number) => {
-    if (newQty <= 0) {
-      handleRemoveCartItem(productId, variantId);
-      return;
-    }
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.productId === productId && item.variantId === variantId
-          ? { ...item, quantity: newQty }
-          : item
-      )
-    );
-  };
-
   const handleRemoveCartItem = (productId: string, variantId: string) => {
+    setCartItems((prev) => prev.filter((i) => !(i.productId === productId && i.variantId === variantId)));
+  };
+
+  const handleUpdateCartQty = (productId: string, variantId: string, newQty: number) => {
+    if (newQty <= 0) return handleRemoveCartItem(productId, variantId);
     setCartItems((prev) =>
-      prev.filter((item) => !(item.productId === productId && item.variantId === variantId))
+      prev.map((i) => (i.productId === productId && i.variantId === variantId ? { ...i, quantity: newQty } : i))
     );
   };
 
-  const handleProceedToCheckout = () => {
-    setIsCartOpen(false);
-    setIsCheckoutOpen(true);
-  };
+  const openTracking = () => setIsTrackingModalOpen(true);
 
-  const handleOrderCompleted = (newOrder: OnlineOrder) => {
-    // Clear cart on successful order
-    setCartItems([]);
-    loadErpData();
+  const productProps = {
+    products,
+    onAddToCart: handleAddToCart,
+    onViewProductDetails: (p: Product) => setSelectedProductForDetail(p),
   };
-
-  const handleOpenTrackingWithDetails = (ref: string, phone: string) => {
-    setTrackingInitialRef(ref);
-    setTrackingInitialPhone(phone);
-    setIsTrackingModalOpen(true);
-  };
-
-  const handleOpenDispatchForOrder = (order: OnlineOrder) => {
-    setSelectedOrderForDetail(null);
-    setTargetOrderForDispatch(order);
-    setCurrentAdminTab('dispatch');
-  };
-
-  const newBookingsCount = orders.filter((o) => o.status === 'NEW').length;
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased flex flex-col selection:bg-cyan-500 selection:text-white">
-      {isAdminMode && activeStaff ? (
-        /* ================= ERP ADMINISTRATIVE & DISPATCH CONTROL DESK ================= */
-        <AdminLayout
-          currentTab={currentAdminTab}
-          onSelectTab={setCurrentAdminTab}
-          onExitAdmin={() => setIsAdminMode(false)}
-          activeStaff={activeStaff}
-          onChangeActiveStaff={setActiveStaff}
-          newBookingsCount={newBookingsCount}
-        >
-          {currentAdminTab === 'dashboard' && (
-            <AdminDashboard
-              orders={orders}
-              products={products}
-              staff={staff}
-              onOpenOrder={(ord) => setSelectedOrderForDetail(ord)}
-              onNavigateTab={setCurrentAdminTab}
-            />
-          )}
+      <div className="flex-1 flex flex-col w-full">
+        <Navbar
+          currentTab={currentPage ?? ''}
+          onNavigate={goTo}
+          cartItems={cartItems}
+          onOpenCart={() => setIsCartOpen(true)}
+          onOpenTracking={openTracking}
+        />
 
-          {currentAdminTab === 'inbox' && (
-            <OrderInbox
-              orders={orders}
-              staff={staff}
-              onOpenOrder={(ord) => setSelectedOrderForDetail(ord)}
-            />
-          )}
+        {productsError && (
+          <div role="alert" className="w-full bg-amber-50 border-b border-amber-200 text-amber-900 text-xs px-4 py-2 text-center">
+            {productsError}
+          </div>
+        )}
 
-          {currentAdminTab === 'workspace' && (
-            <StaffWorkspace
-              orders={orders}
-              activeOperator={activeStaff}
-              onOpenOrder={(ord) => setSelectedOrderForDetail(ord)}
-            />
-          )}
-
-          {currentAdminTab === 'dispatch' && (
-            <DispatchManagement
-              dispatches={dispatches}
-              orders={orders}
-              vehicles={vehicles}
-              staff={staff}
-              activeOperator={activeStaff}
-              onRefresh={loadErpData}
-              targetOrderForDispatch={targetOrderForDispatch}
-              onClearTargetOrder={() => setTargetOrderForDispatch(null)}
-            />
-          )}
-
-          {currentAdminTab === 'inventory' && (
-            <ErpInventoryLedger
-              products={products}
-              activeOperator={activeStaff}
-              onRefresh={loadErpData}
-            />
-          )}
-
-          {currentAdminTab === 'inquiries' && (
-            <InquiriesAdmin
-              inquiries={inquiries}
-              activeOperator={activeStaff}
-              onRefresh={loadErpData}
-            />
-          )}
-
-          {currentAdminTab === 'content' && <ContentAdmin />}
-
-          {currentAdminTab === 'audit' && <AuditLogsAdmin orders={orders} />}
-
-          {/* Order Detail Drawer */}
-          <OrderDetailDrawer
-            order={selectedOrderForDetail}
-            onClose={() => setSelectedOrderForDetail(null)}
-            staff={staff}
-            activeOperator={activeStaff}
-            onOrderUpdated={loadErpData}
-            onOpenDispatchModal={handleOpenDispatchForOrder}
-          />
-        </AdminLayout>
-      ) : (
-        /* ================= PUBLIC CORPORATE WEBSITE & ORDERING PORTAL ================= */
-        <div className="flex-1 flex flex-col w-full">
-          <Navbar
-            currentTab={currentPublicTab}
-            onNavigate={(tab) => {
-              setCurrentPublicTab(tab);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            cartItems={cartItems}
-            onOpenCart={() => setIsCartOpen(true)}
-            onOpenTracking={() => setIsTrackingModalOpen(true)}
-            onSwitchToAdmin={() => setIsAdminMode(true)}
-            isStaffMode={isAdminMode}
-          />
-
-          <main className="flex-1 w-full">
-            {currentPublicTab === 'home' && (
-              <HomePage
-                products={products}
-                onAddToCart={handleAddToCart}
-                onViewProductDetails={(p) => setSelectedProductForDetail(p)}
-                onNavigate={(tab) => {
-                  setCurrentPublicTab(tab);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                onOpenTracking={() => setIsTrackingModalOpen(true)}
+        <main className="flex-1 w-full">
+          <Suspense fallback={<div className="min-h-[50vh]" />}>
+            <Routes>
+              <Route
+                path="/"
+                element={<HomePage {...productProps} onNavigate={goTo} onOpenTracking={openTracking} />}
               />
-            )}
+              <Route path="/about" element={<AboutPage onNavigate={goTo} />} />
+              <Route path="/operations" element={<OperationsPage onNavigate={goTo} />} />
+              <Route path="/products" element={<ProductsPage {...productProps} />} />
+              <Route path="/news" element={<NewsPage />} />
+              <Route path="/gallery" element={<GalleryPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="*" element={<NotFoundPage onNavigate={goTo} />} />
+            </Routes>
+          </Suspense>
+        </main>
 
-            {currentPublicTab === 'about' && (
-              <AboutPage
-                onNavigate={(tab) => {
-                  setCurrentPublicTab(tab);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-              />
-            )}
+        <Footer
+          onNavigate={goTo}
+          onOpenTracking={openTracking}
+          onOpenDistributorForm={() => goTo('contact')}
+        />
 
-            {currentPublicTab === 'operations' && (
-              <OperationsPage
-                onNavigate={(tab) => {
-                  setCurrentPublicTab(tab);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-              />
-            )}
+        <CartDrawer
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+          items={cartItems}
+          onUpdateQuantity={handleUpdateCartQty}
+          onRemoveItem={handleRemoveCartItem}
+          deliveryMethod={deliveryMethod}
+          onChangeDeliveryMethod={setDeliveryMethod}
+          onProceedToCheckout={() => {
+            setIsCartOpen(false);
+            setIsCheckoutOpen(true);
+          }}
+        />
 
-            {currentPublicTab === 'products' && (
-              <ProductsPage
-                products={products}
-                onAddToCart={handleAddToCart}
-                onViewProductDetails={(p) => setSelectedProductForDetail(p)}
-              />
-            )}
+        <CheckoutModal
+          isOpen={isCheckoutOpen}
+          onClose={() => setIsCheckoutOpen(false)}
+          items={cartItems}
+          deliveryMethod={deliveryMethod}
+          onOrderCompleted={() => setCartItems([])}
+          onTrackOrder={(ref, phone) => {
+            setTrackingInitialRef(ref);
+            setTrackingInitialPhone(phone);
+            setIsTrackingModalOpen(true);
+          }}
+        />
 
-            {currentPublicTab === 'news' && <NewsPage />}
+        <ProductDetailModal
+          product={selectedProductForDetail}
+          onClose={() => setSelectedProductForDetail(null)}
+          onAddToCart={handleAddToCart}
+        />
 
-            {currentPublicTab === 'gallery' && <GalleryPage />}
-
-            {currentPublicTab === 'contact' && <ContactPage />}
-          </main>
-
-          <Footer
-            onNavigate={(tab) => {
-              setCurrentPublicTab(tab);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            onOpenTracking={() => setIsTrackingModalOpen(true)}
-            onOpenDistributorForm={() => {
-              setCurrentPublicTab('contact');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-          />
-
-          {/* Cart Slide-Over Drawer */}
-          <CartDrawer
-            isOpen={isCartOpen}
-            onClose={() => setIsCartOpen(false)}
-            items={cartItems}
-            onUpdateQuantity={handleUpdateCartQty}
-            onRemoveItem={handleRemoveCartItem}
-            deliveryMethod={deliveryMethod}
-            onChangeDeliveryMethod={setDeliveryMethod}
-            onProceedToCheckout={handleProceedToCheckout}
-          />
-
-          {/* Customer Online Booking Checkout Modal */}
-          <CheckoutModal
-            isOpen={isCheckoutOpen}
-            onClose={() => setIsCheckoutOpen(false)}
-            items={cartItems}
-            deliveryMethod={deliveryMethod}
-            onOrderCompleted={handleOrderCompleted}
-            onTrackOrder={handleOpenTrackingWithDetails}
-          />
-
-          {/* Product Detail Modal */}
-          <ProductDetailModal
-            product={selectedProductForDetail}
-            onClose={() => setSelectedProductForDetail(null)}
-            onAddToCart={handleAddToCart}
-          />
-
-          {/* Order Tracking Modal */}
-          <OrderTrackingModal
-            isOpen={isTrackingModalOpen}
-            onClose={() => {
-              setIsTrackingModalOpen(false);
-              setTrackingInitialRef('');
-              setTrackingInitialPhone('');
-            }}
-            initialOrderRef={trackingInitialRef}
-            initialPhone={trackingInitialPhone}
-          />
-        </div>
-      )}
+        <OrderTrackingModal
+          isOpen={isTrackingModalOpen}
+          onClose={() => {
+            setIsTrackingModalOpen(false);
+            setTrackingInitialRef('');
+            setTrackingInitialPhone('');
+          }}
+          initialOrderRef={trackingInitialRef}
+          initialPhone={trackingInitialPhone}
+        />
+      </div>
     </div>
   );
 }

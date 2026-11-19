@@ -8,8 +8,8 @@ import {
   Phone,
   Send,
 } from 'lucide-react';
-import { OnlineOrder } from '../types/erp';
-import { erpStorage } from '../services/erpStorage';
+import type { PublicOrder } from '../../shared/types';
+import { api, ApiError } from '../lib/api';
 import { DeliveryMilestoneTracker } from './DeliveryMilestoneTracker';
 
 interface OrderTrackingModalProps {
@@ -28,8 +28,9 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
   const [orderRef, setOrderRef] = useState(initialOrderRef);
   const [phone, setPhone] = useState(initialPhone);
   const [searched, setSearched] = useState(false);
-  const [foundOrder, setFoundOrder] = useState<OnlineOrder | null>(null);
+  const [foundOrder, setFoundOrder] = useState<PublicOrder | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (initialOrderRef) {
@@ -41,40 +42,26 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
     }
   }, [initialOrderRef, initialPhone, isOpen]);
 
-  useEffect(() => {
-    if (!isOpen || !foundOrder) return;
-    const handleErpUpdate = () => {
-      const updated = erpStorage.getOrderByReferenceAndPhone(
-        foundOrder.orderReference,
-        foundOrder.customer.phoneNumber
-      );
-      if (updated) setFoundOrder(updated);
-    };
-    window.addEventListener('elim_erp_updated', handleErpUpdate);
-    return () => window.removeEventListener('elim_erp_updated', handleErpUpdate);
-  }, [isOpen, foundOrder]);
-
   if (!isOpen) return null;
 
-  const handleLookup = (refToUse = orderRef, phoneToUse = phone) => {
-    if (!refToUse.trim()) {
-      setErrorMsg('Please enter your unique Booking Reference (e.g. ELM-WEB-2026-000101).');
+  async function handleLookup(refToUse = orderRef, phoneToUse = phone) {
+    if (!refToUse.trim() || !phoneToUse.trim()) {
+      setErrorMsg('Please enter your booking reference (e.g. ELM-WEB-2026-000101) and the phone number used to book.');
       return;
     }
 
     setErrorMsg('');
     setSearched(true);
-
-    const order = erpStorage.getOrderByReferenceAndPhone(refToUse, phoneToUse);
-    if (order) {
-      setFoundOrder(order);
-    } else {
+    setIsLoading(true);
+    try {
+      setFoundOrder(await api.trackOrder(refToUse, phoneToUse));
+    } catch (err) {
       setFoundOrder(null);
-      setErrorMsg(
-        'No active booking found matching that reference and phone number. Please verify your reference number from your confirmation message.'
-      );
+      setErrorMsg(err instanceof ApiError ? err.message : 'Could not look up your booking. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }
 
   const isRejected = foundOrder?.status === 'REJECTED';
 
@@ -93,7 +80,7 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
             </div>
             <div>
               <h3 className="font-bold text-base sm:text-lg text-white">Track Elim Water Booking Status</h3>
-              <p className="text-xs text-white/80">Real-time factory ERP fulfillment & fleet tracker</p>
+              <p className="text-xs text-white/80">Check the progress of your booking</p>
             </div>
           </div>
           <button
@@ -138,39 +125,13 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
 
             <button
               onClick={() => handleLookup()}
+              disabled={isLoading}
               className="w-full flex items-center justify-center gap-2 py-2.5 bg-[#2563D9] hover:bg-[#1D4ED8] text-white font-semibold text-xs rounded-lg transition shadow-xs cursor-pointer"
             >
               <Search className="w-4 h-4" />
-              <span>Verify & Check Live Status</span>
+              <span>{isLoading ? 'Checking...' : 'Check Booking Status'}</span>
             </button>
 
-            {/* Quick Demo Shortcuts for instant testing */}
-            <div className="flex items-center gap-2 mt-3 pt-2 border-t border-slate-200 text-[11px] text-slate-500">
-              <span>Quick Test Numbers:</span>
-              <button
-                type="button"
-                onClick={() => {
-                  setOrderRef('ELM-WEB-2026-000101');
-                  setPhone('+234 803 234 5678');
-                  handleLookup('ELM-WEB-2026-000101', '+234 803 234 5678');
-                }}
-                className="text-cyan-700 hover:underline font-mono"
-              >
-                #000101 (Ready for Dispatch)
-              </button>
-              <span>•</span>
-              <button
-                type="button"
-                onClick={() => {
-                  setOrderRef('ELM-WEB-2026-000102');
-                  setPhone('+234 812 987 6543');
-                  handleLookup('ELM-WEB-2026-000102', '+234 812 987 6543');
-                }}
-                className="text-cyan-700 hover:underline font-mono"
-              >
-                #000102 (New Booking)
-              </button>
-            </div>
           </div>
 
           {/* Error Message */}
@@ -241,24 +202,24 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
                   </p>
                 </div>
 
-                {/* Assigned Coordinator */}
+                {/* Order desk contact */}
                 <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-1.5">
                   <div className="flex items-center gap-1.5 font-bold text-slate-800">
                     <Phone className="w-4 h-4 text-cyan-600" />
-                    <span>Assigned Order Officer</span>
+                    <span>Questions about this booking?</span>
                   </div>
-                  <p className="text-slate-900 font-semibold">
-                    {foundOrder.assignedStaffName || 'Folake Adeyemi (Order Desk Lead)'}
-                  </p>
-                  <p className="text-slate-500">Commercial Sales & Fleet Logistics</p>
+                  <p className="text-slate-500">Contact our order desk and quote your booking reference.</p>
+                  <a href="tel:+2348166399794" className="block text-slate-900 font-semibold hover:underline">
+                    +234 816 639 9794
+                  </a>
                   <a
                     href={`https://wa.me/2348166399794?text=Hello%20Elim%20Water,%20regarding%20my%20booking%20${foundOrder.orderReference}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 text-emerald-700 font-bold hover:underline mt-1"
+                    className="inline-flex items-center gap-1.5 text-emerald-700 font-bold hover:underline"
                   >
                     <Send className="w-3 h-3" />
-                    <span>Chat on WhatsApp regarding this booking</span>
+                    <span>Chat on WhatsApp</span>
                   </a>
                 </div>
               </div>

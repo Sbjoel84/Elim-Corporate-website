@@ -11,7 +11,7 @@ import {
   MessageSquare,
   ArrowRight,
 } from 'lucide-react';
-import { erpStorage } from '../services/erpStorage';
+import { api, ApiError } from '../lib/api';
 import { FAQSection } from '../components/FAQSection';
 
 interface ContactPageProps {
@@ -33,30 +33,34 @@ export const ContactPage: React.FC<ContactPageProps> = ({
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMsg('');
     if (!fullName.trim() || !phoneNumber.trim()) {
-      alert('Please provide your name and contact phone number.');
+      setErrorMsg('Please provide your name and contact phone number.');
       return;
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      erpStorage.submitInquiry({
+    try {
+      await api.submitInquiry({
         type: formType,
         fullName,
         phoneNumber,
         email: email || undefined,
         companyName: companyName || undefined,
-        city: city || 'Kubwa, Abuja',
+        city: city || undefined,
         state,
         message,
       });
-
-      setIsSubmitting(false);
       setSubmitted(true);
-    }, 500);
+    } catch (err) {
+      setErrorMsg(err instanceof ApiError ? err.message : 'We could not send your message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -160,10 +164,10 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                 <CheckCircle2 className="w-10 h-10" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-[#102A56]">Inquiry Received & Logged</h3>
+                <h3 className="text-xl font-bold text-[#102A56]">Message Received</h3>
                 <p className="text-xs sm:text-sm text-[#536174] mt-1 max-w-md mx-auto">
-                  Thank you, <strong>{fullName}</strong>. Your message has been saved in our ERP
-                  inquiries desk. Our commercial account officer will reach you on {phoneNumber} shortly.
+                  Thank you, <strong>{fullName}</strong>. Your message has been sent to our
+                  sales desk. A member of our team will reach you on {phoneNumber} shortly.
                 </p>
               </div>
               <button
@@ -180,6 +184,11 @@ export const ContactPage: React.FC<ContactPageProps> = ({
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
+              {errorMsg && (
+                <div role="alert" className="bg-rose-50 border border-rose-200 rounded-xl p-3.5 text-xs text-rose-800">
+                  {errorMsg}
+                </div>
+              )}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-[#102A56] mb-2">
                   Select Inquiry Type

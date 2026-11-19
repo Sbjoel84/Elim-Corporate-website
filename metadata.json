@@ -1,0 +1,6 @@
+{
+  "name": "Elim Water - Corporate Website & ERP Ordering Platform",
+  "description": "Premium corporate website, customer online ordering, and integrated ERP factory order management and dispatch system for Elim Water.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

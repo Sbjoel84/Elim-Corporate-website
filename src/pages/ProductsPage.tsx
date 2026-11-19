@@ -3,23 +3,6 @@ import { Search, SlidersHorizontal, Droplets, ShoppingBag } from 'lucide-react';
 import type { Product, ProductVariant } from '../../shared/types';
 import { ProductCard } from '../components/ProductCard';
 import { PRODUCTS as PRODUCT_RANGE } from '../components/AboutSections';
-import imgProduct1 from '../assets/images/regenerated_image_1794002270000.jpg';
-import imgProduct2 from '../assets/images/regenerated_image_1794002269039.jpg';
-import imgProduct3 from '../assets/images/regenerated_image_1794002270790.jpg';
-import imgProduct4 from '../assets/images/regenerated_image_1794002271520.jpg';
-import imgProduct5 from '../assets/images/regenerated_image_1794002273033.jpg';
-import imgProduct6 from '../assets/images/regenerated_image_1794002273815.jpg';
-import imgProduct7 from '../assets/images/regenerated_image_1794002274279.jpg';
-
-const PRODUCT_IMAGE_BY_ID: Record<string, string> = {
-  'prod-sachet-01': imgProduct1,
-  'prod-bottle-500': imgProduct2,
-  'prod-bottle-1500': imgProduct3,
-  'prod-dispenser-19l': imgProduct4,
-  'prod-bottle-750': imgProduct5,
-  'prod-dispenser-unit': imgProduct6,
-  'prod-pump-manual': imgProduct7,
-};
 // Finished-product photos shown above the catalogue. Names and descriptions
 // come from the About page product list so the wording stays the same.
 const SHOWCASE = [
@@ -44,10 +27,10 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({
 
   // Each category is shown as its own section, one after another.
   const categories: { id: string; label: string }[] = [
-    { id: 'Bottled Water', label: 'Bottled Table Water' },
+    { id: 'Bottled Water', label: 'Bottled Water' },
     { id: 'Sachet Water', label: 'Sachet Water' },
     { id: 'Table Water', label: 'Table & Dining Water' },
-    { id: 'Dispenser Water', label: '19L Dispenser Refills' },
+    { id: 'Dispenser Water', label: 'Dispenser Water' },
     { id: 'Dispenser Bottles & Accessories', label: 'Dispensers & Pumps' },
   ];
   const sectionId = (categoryId: string) => 'category-' + categoryId.toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -224,7 +207,7 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({
                 {cat.items.map((product) => (
                   <ProductCard
                     key={product.id}
-                    product={{ ...product, image: PRODUCT_IMAGE_BY_ID[product.id] || product.image }}
+                    product={product}
                     onAddToCart={onAddToCart}
                     onViewDetails={onViewProductDetails}
                   />

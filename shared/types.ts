@@ -159,6 +159,7 @@ export interface GalleryItem {
     | 'Fleet & Logistics'
     | 'Events'
     | 'Team & Leadership'
+    | 'Finance/Account'
     | 'Production Department'
     | 'Warehouse & Logistics';
   imageUrl: string;

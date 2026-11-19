@@ -12,6 +12,7 @@ export const GalleryPage: React.FC = () => {
   const categories = [
     'ALL',
     'Team & Leadership',
+    'Finance/Account',
     'Production Department',
     'Warehouse & Logistics',
     'Factory Plant',

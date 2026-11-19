@@ -2,7 +2,7 @@ import type { GalleryItem } from '../../shared/types';
 import galleryRollerHallImg from '../assets/images/regenerated_image_1794869856806.jpg';
 
 // Photos shown on the Gallery page. Edit this file to add or remove photos.
-export const GALLERY: GalleryItem[] = [
+const GALLERY_ITEMS: GalleryItem[] = [
   {
     id: 'gal-team-all',
     title: 'Elim Table Water Plant-Wide Workforce & Staff',
@@ -33,10 +33,10 @@ export const GALLERY: GalleryItem[] = [
   },
   {
     id: 'gal-new-02',
-    title: 'Order Desk & Commercial Support Representative',
-    category: 'Team & Leadership',
+    title: 'Warehouse 1',
+    category: 'Warehouse & Logistics',
     imageUrl: '/assets/aistudio/ESS07824_c8de823c.jpg',
-    description: 'Plant commercial desk officer coordinating customer bookings, invoice approvals, and daily truck dispatch schedules at our Kubwa headquarters.',
+    description: 'Warehouse office managing finished-goods stock records, transfers from production and documentation for outgoing dispatch.',
   },
   {
     id: 'gal-new-03',
@@ -82,24 +82,24 @@ export const GALLERY: GalleryItem[] = [
   },
   {
     id: 'gal-new-11',
-    title: 'Customer Care & Front-Office Operations',
-    category: 'Team & Leadership',
+    title: 'Warehouse 2',
+    category: 'Warehouse & Logistics',
     imageUrl: '/assets/aistudio/ESS07886_fea005ff.jpg',
-    description: 'Customer care specialist managing telephone bookings, client inquiries, and distributor correspondence at the Elim Table Water administrative office.',
+    description: 'Warehouse office tracking stock levels, recording deliveries and preparing loading lists for customer orders.',
   },
   {
     id: 'gal-new-12',
-    title: 'Quality Assurance & Batch Documentation Desk',
-    category: 'QA & Lab',
+    title: 'Production 2',
+    category: 'Production Department',
     imageUrl: '/assets/aistudio/ESS07892_b45493b2.jpg',
-    description: 'QA compliance personnel logging batch inspection records, hygiene checklists, and laboratory release metrics into the plant ERP system.',
+    description: 'Production office recording batch output, line schedules and production documentation for the plant.',
   },
   {
     id: 'gal-new-13',
-    title: 'Production & Sample Verification Officer',
-    category: 'QA & Lab',
+    title: 'Production Manager',
+    category: 'Production Department',
     imageUrl: '/assets/aistudio/ESS07897_02cccf95.jpg',
-    description: 'Plant supervisor reviewing batch sample bottles alongside production logs and coding schedules to uphold NAFDAC and ISO 9001 quality standards.',
+    description: 'Production Manager overseeing daily production runs, batch records and product quality across the bottling and packaging lines.',
   },
   {
     id: 'gal-new-14',
@@ -230,30 +230,23 @@ export const GALLERY: GalleryItem[] = [
   {
     id: 'gal-team-accounts',
     title: 'Accounts & Commercial Order Desk Supervisor',
-    category: 'Team & Leadership',
+    category: 'Finance/Account',
     imageUrl: '/assets/aistudio/ESS07924_7ce8501f.jpg',
     description: 'Commercial accounts officer verifying wholesale distributor ledgers, invoice settlements, and daily plant order manifests.',
   },
   {
     id: 'gal-team-finance',
     title: 'Finance & Commercial Administration Desk',
-    category: 'Team & Leadership',
+    category: 'Finance/Account',
     imageUrl: '/assets/aistudio/ESS07928_7722485a.jpg',
     description: 'Finance administrator overseeing distributor billing, payment reconciliation, and corporate account inquiries at Kubwa headquarters.',
   },
   {
     id: 'gal-team-office',
     title: 'Kubwa Plant Administrative & Accounts Office',
-    category: 'Team & Leadership',
+    category: 'Finance/Account',
     imageUrl: '/assets/aistudio/ESS07933_baa3bbd3.jpg',
     description: 'Synchronized finance and commercial operations team working inside the administrative office to clear orders for warehouse dispatch.',
-  },
-  {
-    id: 'gal-wh-sachet-pallet',
-    title: 'Palletized Sachet Water Stock & Dispatch Staging',
-    category: 'Warehouse & Logistics',
-    imageUrl: '/assets/aistudio/ESS07947_3707c862.jpg',
-    description: 'High-capacity plastic pallets loaded with Elim sachet water bags while warehouse staff coordinate outgoing batch release.',
   },
   {
     id: 'gal-bottle-19l-conveyor',
@@ -297,4 +290,62 @@ export const GALLERY: GalleryItem[] = [
     imageUrl: '/assets/aistudio/products_69cca1f6.jpeg',
     description: 'Depot supervisors managing climate-controlled finished bottled water stacks, quality release seals, and fleet loading.',
   },
+];
+
+// Display order on the Gallery / Facilities page: offices by rank, then group
+// photos, loading, warehouses with products, and finally production & plant.
+const GALLERY_ORDER = [
+  // Offices (by rank)
+  'gal-team-accounts', // Accounts & Commercial Order Desk Supervisor
+  'gal-team-finance', // Finance & Commercial Administration Desk
+  'gal-team-office',
+  'gal-new-02',
+  'gal-new-11',
+  'gal-new-12',
+  'gal-new-13',
+  'gal-new-14',
+  'gal-new-04',
+  // Group photos
+  'gal-team-mgmt',
+  'gal-team-mgmt-wide',
+  'gal-team-all',
+  'gal-team-01',
+  'gal-prod-01',
+  'gal-wh-01',
+  // Loading
+  'gal-new-03',
+  'gal-fleet-van-sachet',
+  'gal-fleet-van-full',
+  'gal-fleet-truck-trolley',
+  'gal-fleet-truck-bay',
+  'gal-04',
+  'gal-new-08',
+  'gal-new-09',
+  'gal-new-10',
+  // Warehouses with products
+  'gal-new-01',
+  'gal-wh-sachet',
+  'gal-prod-sachet',
+  'gal-prod-1500-wide',
+  'gal-prod-1500-portrait',
+  'gal-prod-19l',
+  // Production & plant
+  'gal-new-05',
+  'gal-02',
+  'gal-03',
+  'gal-05',
+  'gal-bottle-19l-conveyor',
+  'gal-01',
+  'gal-06',
+  'gal-prod-blow-01',
+  'gal-plant-blow-02',
+  'gal-plant-blow-auto',
+  'gal-plant-plaque',
+];
+
+const byId = new Map(GALLERY_ITEMS.map((item) => [item.id, item]));
+// Listed items first, in order; anything not listed (e.g. newly added) goes at the end.
+export const GALLERY: GalleryItem[] = [
+  ...GALLERY_ORDER.flatMap((id) => byId.get(id) ?? []),
+  ...GALLERY_ITEMS.filter((item) => !GALLERY_ORDER.includes(item.id)),
 ];

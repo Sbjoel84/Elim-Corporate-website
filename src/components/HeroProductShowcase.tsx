@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
-import elimCompleteLineupImg from '../assets/images/elim_complete_lineup_1794517554730.jpg';
-import elimSachetPackImg from '../assets/images/elim_sachet_pack_1794517555155.jpg';
-import elimBottledWaterImg from '../assets/images/regenerated_image_1794002269039.jpg';
-import elimDispenserTrioImg from '../assets/images/regenerated_image_1794002270000.jpg';
 
 interface HeroSlide {
   id: string;
@@ -12,23 +8,34 @@ interface HeroSlide {
   subtitle: string;
   imageUrl: string;
   productId: string;
+  /** Show the whole photo (for tall shots) over a blurred copy, instead of cropping. */
+  fitWhole?: boolean;
 }
 
+// Real Elim product photos only: each product, then its finished-goods stock.
 const HERO_PRODUCT_SLIDES: HeroSlide[] = [
-  {
-    id: 'all-elim',
-    label: 'All Products',
-    title: 'Complete Elim Hydration Lineup',
-    subtitle: '19L Dispenser, Bottled (500ml, 750ml, 1.5L) & Sachet Water',
-    imageUrl: elimCompleteLineupImg,
-    productId: 'prod-dispenser-19l',
-  },
   {
     id: 'sachet',
     label: 'Sachet Water',
     title: 'Elim Pure Flow Sachet Water',
     subtitle: '50cl Crystal-Clear UV & Ozone Sterilized Packs',
-    imageUrl: elimSachetPackImg,
+    imageUrl: '/assets/aistudio/ESS07833_6bee5d2d.jpg',
+    productId: 'prod-sachet-01',
+  },
+  {
+    id: 'sachet-stock-1',
+    label: 'Sachet Water Stock',
+    title: 'Elim Sachet Water Stock',
+    subtitle: '',
+    imageUrl: '/assets/aistudio/ESS07834_eb5d98d0.jpg',
+    productId: 'prod-sachet-01',
+  },
+  {
+    id: 'sachet-stock-2',
+    label: 'Sachet Water Stock',
+    title: 'Elim Sachet Water Stock',
+    subtitle: '',
+    imageUrl: '/assets/aistudio/ESS07947_3707c862.jpg',
     productId: 'prod-sachet-01',
   },
   {
@@ -36,15 +43,39 @@ const HERO_PRODUCT_SLIDES: HeroSlide[] = [
     label: 'Bottled Water',
     title: 'All Sizes of Bottled Table Water',
     subtitle: '500ml, 750ml Active Sports & 1.5L Family Packs',
-    imageUrl: elimBottledWaterImg,
+    imageUrl: '/assets/aistudio/ESS07910_42d1ee19.jpg',
     productId: 'prod-bottle-1500',
   },
   {
-    id: 'dispenser',
-    label: 'Dispenser Water',
-    title: '19L Dispenser Refill & Bottles',
-    subtitle: 'Hermetically Sealed Polycarbonate Jars for Home & Office',
-    imageUrl: elimDispenserTrioImg,
+    id: 'bottled-stock-1',
+    label: 'Bottled Water Stock',
+    title: 'Elim Bottled Water Stock',
+    subtitle: '',
+    imageUrl: '/assets/aistudio/ESS07858_e0d82076.jpg',
+    productId: 'prod-bottle-1500',
+  },
+  {
+    id: 'bottled-stock-2',
+    label: 'Bottled Water Stock',
+    title: 'Elim Bottled Water Stock',
+    subtitle: '',
+    imageUrl: '/assets/aistudio/ESS07859_0a5e6882.jpg',
+    productId: 'prod-bottle-1500',
+  },
+  {
+    id: 'bottled-stock-3',
+    label: 'Bottled Water Stock',
+    title: 'Elim Bottled Water Stock',
+    subtitle: '',
+    imageUrl: '/assets/aistudio/ESS07989_05ef32ab.jpg',
+    productId: 'prod-bottle-1500',
+  },
+  {
+    id: 'dispenser-stock-2',
+    label: 'Dispenser Water Stock',
+    title: 'Elim 19L Dispenser Jars',
+    subtitle: '',
+    imageUrl: '/assets/aistudio/ESS07944_5d5eefdb.jpg',
     productId: 'prod-dispenser-19l',
   },
   {
@@ -124,12 +155,20 @@ export const HeroProductShowcase: React.FC<HeroProductShowcaseProps> = ({
                   : 'opacity-0 scale-105 z-0 pointer-events-none'
               }`}
             >
+              {slide.fitWhole && (
+                <img
+                  src={slide.imageUrl}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover blur-2xl scale-125 opacity-80"
+                />
+              )}
               <img
                 src={slide.imageUrl}
                 alt={slide.title}
-                className={`w-full h-full object-cover object-center transition-transform duration-[3600ms] ease-linear ${
-                  isActive ? 'scale-105' : 'scale-100'
-                }`}
+                className={`relative w-full h-full ${
+                  slide.fitWhole ? 'object-contain pt-6 pb-32' : 'object-cover object-center'
+                } transition-transform duration-[3600ms] ease-linear ${isActive ? 'scale-105' : 'scale-100'}`}
               />
               {/* Subtle Bottom & Top Scrim for Tag Readability */}
               <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#102A56]/75 via-[#102A56]/20 to-transparent pointer-events-none" />

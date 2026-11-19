@@ -245,42 +245,27 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
               </div>
             </div>
 
-            {/* Card 2: Pallet Depot & Cargo Trike */}
+            {/* Card 2: Palletized Sachet Water Stock */}
             <div className="bg-[#F5F7FA] rounded-2xl border border-[#E1E8F0] overflow-hidden shadow-2xs hover:shadow-md transition duration-200 flex flex-col group">
               <div className="relative aspect-4/3 overflow-hidden bg-slate-200">
                 <img
-                  src="/assets/aistudio/ESS07880_83ec7ec6.jpg"
-                  alt="Palletized Finished Goods Depot & Huaihai Fleet Hauler"
+                  src="/assets/aistudio/ESS07947_3707c862.jpg"
+                  alt="Palletized Sachet Water Stock & Dispatch Staging"
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                   loading="lazy"
                 />
                 <div className="absolute top-3 left-3 bg-[#2563D9]/90 backdrop-blur-xs text-white text-[11px] font-semibold px-3 py-1 rounded-full">
-                  Internal Transport Logistics
+                  Warehouse & Logistics
                 </div>
               </div>
-              <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-3">
-                <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-[#102A56]">
-                    High-Capacity Pallet Stacks & Eco-Friendly Flatbed Hauler
-                  </h3>
-                  <p className="text-xs font-semibold text-[#2563D9] mt-0.5">
-                    Huaihai Electric Cargo Tricycle & Pallet Matrix
-                  </p>
-                  <p className="text-xs sm:text-sm text-[#536174] mt-2.5 leading-relaxed">
-                    Towering, laser-aligned stacks of sealed bottled water resting on treated wooden pallets. Our fleet of
-                    heavy-duty electric cargo flatbeds provides zero-emission, silent transfer across staging zones,
-                    eliminating fuel fumes inside the food-grade storage depot.
-                  </p>
-                </div>
-                <div className="pt-3 border-t border-[#E1E8F0] flex items-center justify-between text-xs text-[#536174]">
-                  <span className="flex items-center gap-1.5 font-medium">
-                    <Truck className="w-3.5 h-3.5 text-[#2563D9]" />
-                    <span>Zero-Emission Transport</span>
-                  </span>
-                  <span className="font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
-                    Electric Fleet
-                  </span>
-                </div>
+              <div className="p-6 sm:p-7 flex-1 flex flex-col space-y-3">
+                <h3 className="text-lg sm:text-xl font-bold text-[#102A56]">
+                  Palletized Sachet Water Stock & Dispatch Staging
+                </h3>
+                <p className="text-xs sm:text-sm text-[#536174] leading-relaxed">
+                  High-capacity plastic pallets loaded with Elim sachet water bags while warehouse staff coordinate
+                  outgoing batch release.
+                </p>
               </div>
             </div>
 

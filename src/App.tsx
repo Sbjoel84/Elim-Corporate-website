@@ -10,6 +10,7 @@ import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { OrderTrackingModal } from './components/OrderTrackingModal';
+import { BookOrderModal } from './components/BookOrderModal';
 import { HomePage } from './pages/HomePage';
 
 // Other pages are downloaded only when visited, to keep the first load small.
@@ -94,7 +95,16 @@ export default function App() {
   const [trackingInitialRef, setTrackingInitialRef] = useState('');
   const [trackingInitialPhone, setTrackingInitialPhone] = useState('');
 
-  const handleAddToCart = (product: Product, variant: ProductVariant, quantity: number) => {
+  // Book Order: opens on the front page; step 2 is the checkout form.
+  const [isBookOrderOpen, setIsBookOrderOpen] = useState(false);
+  const [bookOrderProductId, setBookOrderProductId] = useState<string | undefined>();
+  const openBookOrder = (productId?: string) => {
+    if (currentPage !== 'home') goTo('home');
+    setBookOrderProductId(productId);
+    setIsBookOrderOpen(true);
+  };
+
+  const handleAddToCart = (product: Product, variant: ProductVariant, quantity: number, openCart = true) => {
     setCartItems((prev) => {
       const existing = prev.find((i) => i.productId === product.id && i.variantId === variant.id);
       if (existing) {
@@ -114,7 +124,7 @@ export default function App() {
         },
       ];
     });
-    setIsCartOpen(true);
+    if (openCart) setIsCartOpen(true);
   };
 
   const handleRemoveCartItem = (productId: string, variantId: string) => {
@@ -145,6 +155,7 @@ export default function App() {
           cartItems={cartItems}
           onOpenCart={() => setIsCartOpen(true)}
           onOpenTracking={openTracking}
+          onBookOrder={() => openBookOrder()}
         />
 
         {productsError && (
@@ -158,7 +169,9 @@ export default function App() {
             <Routes>
               <Route
                 path="/"
-                element={<HomePage {...productProps} onNavigate={goTo} onOpenTracking={openTracking} />}
+                element={
+                  <HomePage {...productProps} onNavigate={goTo} onOpenTracking={openTracking} onBookOrder={openBookOrder} />
+                }
               />
               <Route path="/about" element={<AboutPage onNavigate={goTo} />} />
               <Route path="/operations" element={<OperationsPage onNavigate={goTo} />} />
@@ -175,6 +188,19 @@ export default function App() {
           onNavigate={goTo}
           onOpenTracking={openTracking}
           onOpenDistributorForm={() => goTo('contact')}
+        />
+
+        <BookOrderModal
+          isOpen={isBookOrderOpen}
+          onClose={() => setIsBookOrderOpen(false)}
+          products={products}
+          cartItems={cartItems}
+          initialProductId={bookOrderProductId}
+          onAddToCart={(p, v, q) => handleAddToCart(p, v, q, false)}
+          onContinueToCheckout={() => {
+            setIsBookOrderOpen(false);
+            setIsCheckoutOpen(true);
+          }}
         />
 
         <CartDrawer

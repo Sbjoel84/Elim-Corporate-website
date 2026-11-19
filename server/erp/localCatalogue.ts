@@ -1,12 +1,54 @@
-import type { Product } from '../../shared/types';
+import type { Product, ProductCategory } from '../../shared/types';
 
 // Product catalogue used by the LOCAL adapter only (development / until the
 // ERP is connected). Once an ERP adapter is in place, products, prices and
 // availability come from the ERP and this file is no longer used.
 //
-// TODO(before launch): confirm every price, pack size and description with
-// the commercial team. These values came from the original prototype.
+// Bottled and dispenser products and prices come from the company price list.
+// Sachet water, the floor-standing dispenser and the hand pump still use the
+// original prototype prices (TODO: confirm before launch).
+
+const BOTTLE_PHOTO = '/assets/aistudio/ESS07910_42d1ee19.jpg';
+const JUG_PHOTO = '/assets/aistudio/ESS07830_fbde1bf0.jpg';
+const BOTTLED_TEXT = 'Enjoy the convenience of our portable Elim bottled water.';
+const DISPENSER_TEXT = 'Our water for dispensers provides long-lasting refreshment in homes and offices.';
+
+/** A price-list product sold in a single unit (Pack, Bottle, ...). */
+function priceListItem(
+  id: string,
+  sku: string,
+  name: string,
+  category: ProductCategory,
+  unit: string,
+  price: number,
+  image: string,
+  description: string
+): Product {
+  return {
+    id,
+    sku,
+    name,
+    category,
+    description,
+    image,
+    variants: [
+      { id: `${id}-${unit.toLowerCase()}`, name: unit, size: '', packaging: unit, unitsPerPack: 1, unitOfMeasure: unit, price, isDefault: true },
+    ],
+    availability: 'IN_STOCK',
+    featured: true,
+  };
+}
+
+// Order matches the price list. shared/homeProducts.ts controls the home page.
 export const LOCAL_CATALOGUE: Product[] = [
+  priceListItem('prod-bottle-1500', 'ELM-BTL-150CL', '1.5Ltr Bottled Water', 'Bottled Water', 'Pack', 1700, BOTTLE_PHOTO, BOTTLED_TEXT),
+  priceListItem('prod-bottle-1000', 'ELM-BTL-100CL', '1Ltr Bottled Water', 'Bottled Water', 'Pack', 1000, BOTTLE_PHOTO, BOTTLED_TEXT),
+  priceListItem('prod-bottle-350', 'ELM-BTL-35CL', '35cl Bottled Water', 'Bottled Water', 'Pack', 2550, BOTTLE_PHOTO, BOTTLED_TEXT),
+  priceListItem('prod-bottle-500', 'ELM-BTL-50CL', '50cl Bottled Water', 'Bottled Water', 'Pack', 2650, BOTTLE_PHOTO, BOTTLED_TEXT),
+  priceListItem('prod-bottle-750', 'ELM-BTL-75CL', '75cl Bottled Water', 'Bottled Water', 'Pack', 1700, BOTTLE_PHOTO, BOTTLED_TEXT),
+  priceListItem('prod-empty-jug', 'ELM-DSP-JUG', 'Empty Jug', 'Dispenser Water', 'Bottle', 3000, JUG_PHOTO, DISPENSER_TEXT),
+  priceListItem('prod-dispenser-19l', 'ELM-DSP-JUGW', 'Jug + Water', 'Dispenser Water', 'Bottle', 4200, JUG_PHOTO, DISPENSER_TEXT),
+  priceListItem('prod-dispenser-refill', 'ELM-DSP-REFILL', 'Dispenser Water', 'Dispenser Water', 'Bottle', 1200, JUG_PHOTO, DISPENSER_TEXT),
   {
     id: 'prod-sachet-01',
     sku: 'ELM-SCH-50CL',
@@ -48,143 +90,13 @@ export const LOCAL_CATALOGUE: Product[] = [
     orderingNotes: 'Minimum delivery for wholesale rate is 5 bundles. Same-day dispatch available.',
   },
   {
-    id: 'prod-bottle-500',
-    sku: 'ELM-BTL-500ML',
-    name: 'Elim Natural Spring Table Water 500ml',
-    category: 'Bottled Water',
-    description:
-      'Crisp, refreshing table water purified via 7-stage reverse osmosis and ozonated for pristine clarity and perfect mineral balance. Packed in recyclable PET bottles.',
-    image: '/assets/products/elim-500ml.jpg',
-    additionalImages: [
-      '/assets/aistudio/ESS07858_e0d82076.jpg',
-    ],
-    variants: [
-      {
-        id: 'var-btl-500-pack12',
-        name: 'Carton of 12 Bottles (500ml)',
-        size: '500ml',
-        packaging: 'Shrink-wrapped Pack of 12',
-        unitsPerPack: 12,
-        unitOfMeasure: 'Pack',
-        price: 1800,
-        wholesalePrice: 1650,
-        isDefault: true,
-      },
-      {
-        id: 'var-btl-500-pallet',
-        name: 'Pallet Bulk Deal (100 Packs)',
-        size: '500ml',
-        packaging: '100 Packs on Pallet',
-        unitsPerPack: 100,
-        unitOfMeasure: 'Pallet',
-        price: 165000,
-        wholesalePrice: 160000,
-      },
-    ],
-    availability: 'IN_STOCK',
-    featured: true,
-    phLevel: '7.5',
-    tdsLevel: '82 ppm',
-    orderingNotes: 'Ideal for conferences, weddings, offices, and retail shelves.',
-  },
-  {
-    id: 'prod-bottle-750',
-    sku: 'ELM-BTL-750ML',
-    name: 'Elim Sports Cap & Active Table Water 750ml',
-    category: 'Bottled Water',
-    description:
-      'Ergonomic active bottle designed for gym-goers, commuters, and school lunchboxes. Enriched with natural electrolytes and essential minerals.',
-    image: '/assets/products/elim-750ml.jpg',
-    variants: [
-      {
-        id: 'var-btl-750-pack12',
-        name: 'Carton of 12 Bottles (750ml)',
-        size: '750ml',
-        packaging: 'Shrink-wrapped Pack of 12',
-        unitsPerPack: 12,
-        unitOfMeasure: 'Pack',
-        price: 2300,
-        wholesalePrice: 2150,
-        isDefault: true,
-      },
-    ],
-    availability: 'IN_STOCK',
-    featured: false,
-    phLevel: '7.4',
-    tdsLevel: '84 ppm',
-  },
-  {
-    id: 'prod-bottle-1500',
-    sku: 'ELM-BTL-1500ML',
-    name: 'Elim Premium Table Water 1.5 Liters',
-    category: 'Table Water',
-    description:
-      'Generous 1.5L family and dining table water. Engineered for home refrigeration and dinner tables, maintaining crisp mineral purity.',
-    image: '/assets/aistudio/ESS07910_42d1ee19.jpg',
-    variants: [
-      {
-        id: 'var-btl-1500-pack6',
-        name: 'Pack of 6 Jumbo Bottles (1.5L)',
-        size: '1.5 Liters',
-        packaging: 'Shrink-wrapped Pack of 6',
-        unitsPerPack: 6,
-        unitOfMeasure: 'Pack',
-        price: 2400,
-        wholesalePrice: 2200,
-        isDefault: true,
-      },
-    ],
-    availability: 'IN_STOCK',
-    featured: true,
-    phLevel: '7.5',
-    tdsLevel: '80 ppm',
-  },
-  {
-    id: 'prod-dispenser-19l',
-    sku: 'ELM-DSP-19L',
-    name: 'Elim 19-Liter (5 Gallon) Premium Dispenser Bottle Refill',
-    category: 'Dispenser Water',
-    description:
-      'Direct factory exchange refill for commercial and home hot & cold water dispensers. Sanitized using automatic high-pressure interior wash and sealed with tamper-evident hygienic caps.',
-    image: '/assets/aistudio/ESS07830_fbde1bf0.jpg',
-    variants: [
-      {
-        id: 'var-dsp-refill-only',
-        name: 'Bottle Refill (Exchange Empty Bottle)',
-        size: '19 Liters (5 Gallons)',
-        packaging: 'Returnable 19L Polycarbonate Bottle',
-        unitsPerPack: 1,
-        unitOfMeasure: 'Refill',
-        price: 1300,
-        wholesalePrice: 1150,
-        isDefault: true,
-      },
-      {
-        id: 'var-dsp-new-bottle',
-        name: 'New 19L Bottle + Water Included (No Empty Returned)',
-        size: '19 Liters (5 Gallons)',
-        packaging: 'New Heavy-Duty Polycarbonate Bottle + Cap',
-        unitsPerPack: 1,
-        unitOfMeasure: 'Bottle + Water',
-        price: 6800,
-        wholesalePrice: 6500,
-      },
-    ],
-    availability: 'IN_STOCK',
-    featured: true,
-    phLevel: '7.4',
-    tdsLevel: '76 ppm',
-    orderingNotes:
-      'For refills, please ensure an equal number of standard empty 19L bottles are available for our driver to swap.',
-  },
-  {
     id: 'prod-dispenser-unit',
     sku: 'ELM-EQP-HD01',
     name: 'Elim Hot & Cold Floor Standing Water Dispenser',
     category: 'Dispenser Bottles & Accessories',
     description:
       'Energy-efficient compressor cooling with instant child-safety hot water spout. Features a spacious lower storage cabinet for cups and accessories.',
-    image: '/assets/products/dispenser-unit.jpg',
+    image: '/assets/aistudio/image_b039644a.png',
     variants: [
       {
         id: 'var-eqp-dispenser-standard',
@@ -208,7 +120,7 @@ export const LOCAL_CATALOGUE: Product[] = [
     category: 'Dispenser Bottles & Accessories',
     description:
       'Easy-to-use suction pump that clamps directly onto standard 19L bottles. Requires zero electricity; perfect for bedside, camping, and events.',
-    image: '/assets/products/dispenser-pump.jpg',
+    image: '/assets/aistudio/image_b039644a.png',
     variants: [
       {
         id: 'var-pump-manual-1',

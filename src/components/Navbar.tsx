@@ -20,6 +20,7 @@ interface NavbarProps {
   cartItems: CartItem[];
   onOpenCart: () => void;
   onOpenTracking: () => void;
+  onBookOrder: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -28,6 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   cartItems,
   onOpenCart,
   onOpenTracking,
+  onBookOrder,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -143,12 +145,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </button>
 
-          {/* Royal Blue Primary Button: "Get in Touch →" (Reference screenshot style) */}
+          {/* Primary button: Book Order (opens the booking form on the front page) */}
           <button
-            onClick={() => onNavigate('contact')}
+            onClick={onBookOrder}
             className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-[#2563D9] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-semibold rounded-lg shadow-sm transition transform hover:-translate-y-0.5 cursor-pointer"
           >
-            <span>Get in Touch</span>
+            <span>Book Order</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
@@ -249,12 +251,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="pt-3 border-t border-[#E1E8F0] flex flex-col gap-2">
             <button
               onClick={() => {
-                onNavigate('contact');
+                onBookOrder();
                 setMobileMenuOpen(false);
               }}
               className="w-full py-2.5 bg-[#2563D9] text-white text-xs font-semibold rounded-lg text-center flex items-center justify-center gap-1.5 shadow-sm"
             >
-              <span>Get in Touch</span>
+              <span>Book Order</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
             <button

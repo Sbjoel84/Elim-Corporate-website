@@ -57,6 +57,18 @@ export const HomePage: React.FC<HomePageProps> = ({
     <div className="w-full space-y-0 bg-white">
       {/* ================= SECTION 1: HERO (Header Navy Blue #102A56) ================= */}
       <section className="relative w-full bg-[#102A56] text-white pt-12 pb-20 lg:pt-16 lg:pb-24 border-b border-blue-950/60 overflow-hidden">
+        {/* Background: aerial view of the Elim factory complex */}
+        <img
+          src="/assets/aistudio/elim-layout-1.jpg"
+          srcSet="/assets/aistudio/elim-layout-1-1200.jpg 1200w, /assets/aistudio/elim-layout-1.jpg 2400w"
+          sizes="100vw"
+          alt=""
+          aria-hidden="true"
+          fetchPriority="high"
+          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+        />
+        {/* Navy overlay keeps the headline readable over the photo */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#102A56]/95 via-[#102A56]/80 to-[#102A56]/45 pointer-events-none" />
         {/* Subtle Ambient Radial Highlight */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(37,99,217,0.22),transparent_55%)] pointer-events-none" />
 

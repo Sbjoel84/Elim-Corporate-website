@@ -1,5 +1,4 @@
 import React from 'react';
-import { UserRound } from 'lucide-react';
 
 /** Top of the Gallery page, by rank: Chairman / CEO, then Operations Manager. */
 export const TeamShowcase: React.FC = () => (
@@ -28,16 +27,24 @@ export const TeamShowcase: React.FC = () => (
       </div>
     </div>
 
-    {/* Operations Manager (photo to be added) */}
+    {/* Operations Manager */}
     <div className="bg-white rounded-2xl border border-[#E1E8F0] overflow-hidden shadow-2xs flex flex-col">
-      <div className="relative h-[320px] sm:h-[400px] lg:h-[460px] bg-[#F5F7FA] flex items-center justify-center">
-        <UserRound className="w-24 h-24 text-[#CBD5E1]" aria-hidden="true" />
+      <div className="relative h-[320px] sm:h-[400px] lg:h-[460px] overflow-hidden bg-slate-100">
+        <img
+          src="/assets/aistudio/OM-ESS07816.jpg"
+          alt="Operations Manager of Elim Table Water in his office"
+          className="w-full h-full object-cover object-[center_30%]"
+        />
         <span className="absolute top-4 left-4 bg-[#102A56]/90 backdrop-blur-xs text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
           Operations Manager
         </span>
       </div>
       <div className="p-6 sm:p-7 flex-1">
         <h3 className="text-xl font-bold text-[#102A56]">Operations Manager</h3>
+        <p className="text-sm text-[#536174] leading-relaxed mt-2">
+          Operations Manager overseeing daily plant operations, production, warehouse and dispatch across the
+          Kubwa factory.
+        </p>
       </div>
     </div>
   </div>

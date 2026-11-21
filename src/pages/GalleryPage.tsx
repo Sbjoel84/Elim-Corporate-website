@@ -45,7 +45,7 @@ export const GalleryPage: React.FC = () => {
       <TeamShowcase />
 
       {/* Category Filter Tabs */}
-      <div className="flex items-center justify-center gap-2 overflow-x-auto pb-2">
+      <div className="flex flex-wrap items-center justify-center gap-2">
         {categories.map((cat) => (
           <button
             key={cat}

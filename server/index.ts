@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express, { type NextFunction, type Request, type Response } from 'express';
 import { existsSync } from 'fs';
 import { createServer as createHttpServer } from 'http';
+import { networkInterfaces } from 'os';
 import path from 'path';
 import { ErpUserError, getErpAdapter } from './erp/adapter';
 import { validateInquiry, validateOrder, ValidationError } from './validation';
@@ -163,17 +164,54 @@ async function start() {
     app.get('*', (_req, res) => res.sendFile(path.join(distDir, 'index.html')));
   }
 
-  httpServer.on('error', (err: NodeJS.ErrnoException) => {
-    if (err.code === 'EADDRINUSE') {
-      console.error(`Port ${port} is already in use. Stop the other server or set PORT in .env.`);
-      process.exit(1);
-    }
-    throw err;
-  });
+  // In development, if the port is busy (e.g. another `npm run dev` is still
+  // open), try the next ones instead of quitting. In production, fail clearly.
+  const maxAttempts = isDev ? 10 : 1;
+  let attempt = 0;
+  const tryListen = (p: number) => {
+    const onListening = () => {
+      httpServer.removeListener('error', onError);
+      printBanner(p);
+    };
+    const onError = (err: NodeJS.ErrnoException) => {
+      httpServer.removeListener('listening', onListening);
+      if (err.code === 'EADDRINUSE' && ++attempt < maxAttempts) {
+        console.log(`Port ${p} is in use, trying ${p + 1}...`);
+        tryListen(p + 1);
+        return;
+      }
+      if (err.code === 'EADDRINUSE') {
+        console.error(`Port ${p} is already in use. Stop the other server or set PORT in .env.`);
+        process.exit(1);
+      }
+      throw err;
+    };
+    httpServer.once('listening', onListening);
+    httpServer.once('error', onError);
+    httpServer.listen(p);
+  };
+  tryListen(port);
+}
 
-  httpServer.listen(port, () => {
-    console.log(`Elim Water website running at http://localhost:${port} (${isDev ? 'development' : 'production'})`);
-  });
+/** Prints the clickable links, Vite-style, so they are easy to spot. */
+function printBanner(p: number) {
+  const bold = (s: string) => `\x1b[1m${s}\x1b[22m`;
+  const cyan = (s: string) => `\x1b[36m${s}\x1b[39m`;
+  const green = (s: string) => `\x1b[32m${s}\x1b[39m`;
+  const dim = (s: string) => `\x1b[2m${s}\x1b[22m`;
+
+  const network = Object.values(networkInterfaces())
+    .flat()
+    .filter((i) => i && i.family === 'IPv4' && !i.internal)
+    .map((i) => `http://${i!.address}:${p}/`);
+
+  console.log('');
+  console.log(`  ${green(bold('Elim Water website'))} ${dim(isDev ? '(development)' : '(production)')}`);
+  console.log('');
+  console.log(`  ${green('➜')}  ${bold('Local:')}   ${cyan(`http://localhost:${p}/`)}`);
+  for (const url of network) console.log(`  ${green('➜')}  ${bold('Network:')} ${cyan(url)}`);
+  console.log(dim('     Ctrl+Click a link to open it. Press Ctrl+C to stop.'));
+  console.log('');
 }
 
 start();

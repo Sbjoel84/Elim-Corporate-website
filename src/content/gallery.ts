@@ -4,6 +4,13 @@ import galleryRollerHallImg from '../assets/images/regenerated_image_17948698568
 // Photos shown on the Gallery page. Edit this file to add or remove photos.
 const GALLERY_ITEMS: GalleryItem[] = [
   {
+    id: 'gal-team-store',
+    title: 'Store',
+    category: 'Warehouse & Logistics',
+    imageUrl: '/assets/aistudio/Store-ESS07822.jpg',
+    description: 'Store office keeping records of materials, supplies and stock issued to the plant.',
+  },
+  {
     id: 'gal-team-all',
     title: 'Elim Table Water Plant-Wide Workforce & Staff',
     category: 'Team & Leadership',
@@ -299,6 +306,7 @@ const GALLERY_ORDER = [
   'gal-team-accounts', // Accounts & Commercial Order Desk Supervisor
   'gal-team-finance', // Finance & Commercial Administration Desk
   'gal-team-office',
+  'gal-team-store',
   'gal-new-02',
   'gal-new-11',
   'gal-new-12',

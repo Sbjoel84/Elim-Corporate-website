@@ -40,7 +40,7 @@ export const Footer: React.FC<FooterProps> = ({
         {/* Newsletter Subscription Card (Sleek corporate style) */}
         <div className="w-full rounded-2xl bg-white border border-[#E1E8F0] p-6 sm:p-8 mb-12 shadow-2xs flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#2563D9] block">
+            <span className="text-[15px] font-bold uppercase tracking-wider text-[#2563D9] block">
               NEWSLETTER SUBSCRIPTION
             </span>
             <h3 className="text-xl sm:text-2xl font-bold text-[#102A56] tracking-tight">
@@ -84,12 +84,12 @@ export const Footer: React.FC<FooterProps> = ({
                 <span className="text-lg font-bold text-[#2563D9] tracking-tight ml-1">
                   TABLE WATER
                 </span>
-                <p className="text-[10px] text-[#536174] font-medium">Pure Natural Healthy Water</p>
+                <p className="text-[15px] text-[#536174] font-medium">Pure Natural Healthy Water</p>
               </div>
             </div>
             <p className="text-xs text-[#536174] leading-relaxed">
               Dedicated to delivering high-quality, pure and healthy water that improves lives worldwide.
-              Certified by NAFDAC (Reg. No: 01-8422) and treated through 7-stage reverse osmosis.
+              Registered by NAFDAC (Reg. No: 01-8422), SON MANCAP certified, and purified through reverse osmosis.
             </p>
 
             {/* Direct WhatsApp Action */}
@@ -206,7 +206,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={() => onNavigate('products')}
                   className="hover:text-[#2563D9] transition cursor-pointer"
                 >
-                  19L Dispenser Jar Refills
+                  18.9L Dispenser Jar Refills
                 </button>
               </li>
               <li>
@@ -215,14 +215,6 @@ export const Footer: React.FC<FooterProps> = ({
                   className="hover:text-[#2563D9] transition cursor-pointer"
                 >
                   Pure Flow Sachet Water (20 Bags)
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('products')}
-                  className="hover:text-[#2563D9] transition cursor-pointer"
-                >
-                  Water Dispensers & Accessories
                 </button>
               </li>
             </ul>
@@ -256,7 +248,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={() => onNavigate('operations')}
                   className="hover:text-[#2563D9] transition cursor-pointer"
                 >
-                  Certificates (NAFDAC & ISO)
+                  Certificates (NAFDAC & SON)
                 </button>
               </li>
               <li>
@@ -313,7 +305,7 @@ export const Footer: React.FC<FooterProps> = ({
         {/* Bottom Copyright Bar */}
         <div className="pt-6 text-xs text-[#536174] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p>© {new Date().getFullYear()} Elim Table Water Ltd. All Rights Reserved.</p>
-          <div className="flex items-center gap-6 text-[11px]">
+          <div className="flex items-center gap-6 text-[15px]">
             <span className="hover:text-[#2563D9] cursor-pointer">Privacy Policy</span>
             <span className="hover:text-[#2563D9] cursor-pointer">Terms of Service</span>
             <span className="text-emerald-600 flex items-center gap-1 font-semibold">

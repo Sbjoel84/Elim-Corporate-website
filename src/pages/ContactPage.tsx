@@ -67,7 +67,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({
     <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 py-12 space-y-12 bg-white">
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-[#2563D9] bg-[#EAF4FF] px-3 py-1 rounded-full border border-blue-100">
+        <span className="text-[15px] font-bold uppercase tracking-wider text-[#2563D9] bg-[#EAF4FF] px-3 py-1 rounded-full border border-blue-100">
           Factory Direct Helpdesk & Commercial Sales
         </span>
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#102A56]">
@@ -84,7 +84,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-[#102A56] text-white p-6 sm:p-8 rounded-2xl space-y-6 shadow-sm">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-blue-200 block mb-1">
+              <span className="text-[15px] font-bold uppercase tracking-widest text-blue-200 block mb-1">
                 Factory Headquarters & Bottling Complex
               </span>
               <h3 className="text-xl font-bold text-white">Elim Table Water Ltd</h3>
@@ -124,7 +124,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                 <div>
                   <strong className="text-white block font-semibold mb-0.5">Loading Bay & Dispatch Hours:</strong>
                   <span>Monday - Saturday: 7:00 AM - 6:00 PM</span>
-                  <span className="block text-[11px] text-blue-200/80">24/7 Plant Continuous Automated Production</span>
+                  <span className="block text-[15px] text-blue-200/80">24/7 Plant Continuous Automated Production</span>
                 </div>
               </div>
             </div>

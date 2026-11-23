@@ -10,12 +10,10 @@ import {
   Package,
   Quote,
   ShieldCheck,
-  Snowflake,
   Target,
   Truck,
 } from 'lucide-react';
 import { FACTORY_ADDRESS } from '../../shared/pricing';
-import fleetImg from '../assets/images/fleet_dock_elim_1794343294832.jpg';
 
 // ---------------------------------------------------------------------------
 // Company profile text for the About page. Edit the wording here.
@@ -58,22 +56,18 @@ export const PRODUCTS = [
     text: 'Our sachet water can serve workshops, rural areas and the entire public.',
   },
   { name: 'PET Cup Water', icon: CupSoda, text: 'Our PET cup water can serve all social occasions.' },
-  {
-    name: 'Ice Blocks',
-    icon: Snowflake,
-    text: 'Our stone-cast, long-lasting ice blocks make chilling of drinks easy for all occasions.',
-  },
 ];
 
 const TRANSPORT = 'Enjoy the convenience of home-delivered Elim Table Water products.';
 const LOCATION = 'The factory complex is in a serene environment.';
 const CLIENTS = 'Our patrons are the entire public.';
+const PATRONAGE_IMG = '/assets/aistudio/productsqw_4491fc0b.jpeg';
 
 // ---------------------------------------------------------------------------
 
 const container = 'w-full px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24';
 const eyebrow =
-  'inline-block text-[11px] font-bold uppercase tracking-wider text-[#2563D9] bg-[#EAF4FF] px-3 py-1 rounded-full border border-blue-100';
+  'inline-block text-[15px] font-bold uppercase tracking-wider text-[#2563D9] bg-[#EAF4FF] px-3 py-1 rounded-full border border-blue-100';
 
 /** About Us, vision, mission, values, objectives and products. */
 export const CompanyProfile: React.FC = () => (
@@ -92,8 +86,8 @@ export const CompanyProfile: React.FC = () => (
 
         <div className="lg:col-span-5 rounded-2xl overflow-hidden shadow-md border border-[#E1E8F0] aspect-4/3">
           <img
-            src="/assets/aistudio/productsqw_4491fc0b.jpeg"
-            alt="Elim Table Water plant and staff"
+            src="/assets/aistudio/elim-layout-1-1200.jpg"
+            alt="Aerial view of the Elim Table Water factory layout"
             className="w-full h-full object-cover object-center"
           />
         </div>
@@ -159,7 +153,7 @@ export const CompanyProfile: React.FC = () => (
         <span className={eyebrow}>Our Products</span>
         <h2 className="text-3xl font-bold tracking-tight text-[#102A56]">About Our Products</h2>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {PRODUCTS.map(({ name, icon: Icon, text }) => (
           <div
             key={name}
@@ -182,7 +176,7 @@ export const ServicesAndLocation: React.FC = () => (
   <section className={`${container} pb-4`}>
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div className="bg-white rounded-2xl border border-[#E1E8F0] overflow-hidden shadow-2xs flex flex-col">
-        <img src={fleetImg} alt="Elim Table Water delivery vehicles" className="w-full aspect-16/9 object-cover" />
+        <img src="/assets/aistudio/elim-layout-1-1200.jpg" alt="Aerial view of the Elim Table Water factory and delivery yard" className="w-full aspect-16/9 object-cover" />
         <div className="p-6 space-y-2">
           <div className="flex items-center gap-2">
             <Truck className="w-5 h-5 text-[#2563D9]" />
@@ -207,12 +201,25 @@ export const ServicesAndLocation: React.FC = () => (
         </div>
       </div>
 
-      <div className="bg-[#102A56] text-white rounded-2xl shadow-2xs p-6 flex flex-col justify-center space-y-3">
-        <div className="flex items-center gap-2">
-          <Quote className="w-5 h-5 text-blue-300" />
-          <h3 className="text-lg font-bold">Our Clients</h3>
+      <div className="relative min-h-[360px] bg-[#102A56] text-white rounded-2xl shadow-2xs overflow-hidden flex flex-col justify-end">
+        {/* Patronage photo: swap PATRONAGE_IMG for a marketplace / customers photo when available */}
+        <img
+          src={PATRONAGE_IMG}
+          alt="Members of the public who patronise Elim Table Water"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#102A56] via-[#102A56]/70 to-[#102A56]/10" />
+        <span className="absolute top-4 left-4 bg-[#2563D9] text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
+          Patronage
+        </span>
+        <div className="relative p-6 space-y-3">
+          <div className="flex items-center gap-2">
+            <Quote className="w-5 h-5 text-blue-300" />
+            <h3 className="text-lg font-bold">Our Clients</h3>
+          </div>
+          <p className="text-xl sm:text-2xl font-semibold leading-snug drop-shadow-sm">“{CLIENTS}”</p>
         </div>
-        <p className="text-xl sm:text-2xl font-semibold leading-snug">“{CLIENTS}”</p>
       </div>
     </div>
   </section>

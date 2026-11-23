@@ -79,8 +79,8 @@ export const HomePage: React.FC<HomePageProps> = ({
               {/* Small Uppercase Introductory Label */}
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-md shadow-2xs">
                 <span className="w-2 h-2 rounded-full bg-[#60A5FA]"></span>
-                <span className="text-blue-100 font-bold text-[11px] sm:text-xs tracking-wider uppercase">
-                  NAFDAC Certified • ISO 9001:2015 Purity
+                <span className="text-blue-100 font-bold text-[15px] sm:text-xs tracking-wider uppercase">
+                  NAFDAC Registered • SON MANCAP Certified
                 </span>
               </div>
 
@@ -128,7 +128,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   <p className="text-xs font-semibold text-white">
                     Trusted by Healthcare Facilities, Corporate Suites & 10,000+ Homes
                   </p>
-                  <p className="text-[11px] text-slate-300">
+                  <p className="text-[15px] text-slate-300">
                     Direct daily factory fleet delivery across Kubwa, Bwari, Dutse & Abuja FCT
                   </p>
                 </div>
@@ -155,7 +155,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <ShieldCheck className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-semibold text-[#102A56]">Quality First</h3>
-            <p className="text-xs sm:text-[13px] text-[#536174] leading-relaxed">
+            <p className="text-xs sm:text-[16px] text-[#536174] leading-relaxed">
               We follow global standards to ensure the highest quality in every product through rigorous 7-stage filtration.
             </p>
           </div>
@@ -166,7 +166,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <FlaskConical className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-semibold text-[#102A56]">Innovation Driven</h3>
-            <p className="text-xs sm:text-[13px] text-[#536174] leading-relaxed">
+            <p className="text-xs sm:text-[16px] text-[#536174] leading-relaxed">
               Continuous innovation in deep aquifer water treatment and sterile automated cleanroom bottling.
             </p>
           </div>
@@ -177,7 +177,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <Globe className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-semibold text-[#102A56]">Prompt Distribution</h3>
-            <p className="text-xs sm:text-[13px] text-[#536174] leading-relaxed">
+            <p className="text-xs sm:text-[16px] text-[#536174] leading-relaxed">
               Delivering trusted table water to homes, corporate offices, hotels, and banquets across Abuja FCT.
             </p>
           </div>
@@ -188,8 +188,8 @@ export const HomePage: React.FC<HomePageProps> = ({
               <HeartHandshake className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-semibold text-[#102A56]">Health & Hydration</h3>
-            <p className="text-xs sm:text-[13px] text-[#536174] leading-relaxed">
-              Our mission is to enhance lives through safe, refreshing, and affordable mineral hydration every day.
+            <p className="text-xs sm:text-[16px] text-[#536174] leading-relaxed">
+              Our mission is to enhance lives through safe, refreshing and affordable drinking water every day.
             </p>
           </div>
         </div>
@@ -237,10 +237,10 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <h3 className="text-xs sm:text-sm lg:text-base font-semibold text-[#102A56] leading-tight">
                   {item.name}
                 </h3>
-                <p className="text-[11px] sm:text-xs text-[#536174] mt-1">{item.category}</p>
+                <p className="text-[15px] sm:text-xs text-[#536174] mt-1">{item.category}</p>
               </div>
               <div className="pt-2.5 sm:pt-3 flex items-center justify-between border-t border-[#E1E8F0] mt-2.5 sm:mt-3">
-                <span className="text-[11px] sm:text-xs lg:text-[13px] font-bold text-[#2563D9]">
+                <span className="text-[15px] sm:text-xs lg:text-[16px] font-bold text-[#2563D9]">
                   ₦{variant.price.toLocaleString()} / {variant.unitOfMeasure}
                 </span>
                 <button
@@ -310,12 +310,12 @@ export const HomePage: React.FC<HomePageProps> = ({
               <div className="relative w-full max-w-md aspect-[1/1.05] rounded-2xl overflow-hidden shadow-md border-4 border-[#F5F7FA] group">
                 <img
                   src="/assets/aistudio/image_b039644a.png"
-                  alt="Elim Quality Operations Flyer"
+                  alt="Elim Table Water products flyer"
                   className="w-full h-full object-cover"
                 />
                 <button
                   onClick={() => setActiveFlyerImg('/assets/aistudio/image_b039644a.png')}
-                  className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-[#102A56]/80 text-white text-[11px] font-semibold backdrop-blur-md shadow-sm hover:bg-[#102A56] transition"
+                  className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-[#102A56]/80 text-white text-[15px] font-semibold backdrop-blur-md shadow-sm hover:bg-[#102A56] transition"
                 >
                   Enlarge Flyer
                 </button>
@@ -450,7 +450,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
 
             <div className="p-3.5 bg-slate-950 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 shrink-0">
-              <span className="text-[11px] sm:text-xs text-slate-400">
+              <span className="text-[15px] sm:text-xs text-slate-400">
                 Plot No. 188A, FCDA Scheme Extension III, Kubwa, Abuja • Hotline: +2348166399794
               </span>
               <div className="flex items-center gap-2">

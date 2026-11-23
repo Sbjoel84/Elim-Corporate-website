@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Droplets,
   Layers,
   ShieldCheck,
   Award,
@@ -12,9 +11,6 @@ import {
   Check,
   Microscope,
 } from 'lucide-react';
-import qualityLabImg from '../assets/images/regenerated_image_1794341640142.jpg';
-import fleetLoadingBayImg from '../assets/images/fleet_dock_elim_1794343294832.jpg';
-import rollerConveyorPackingImg from '../assets/images/roller_packing_elim_1794343294116.jpg';
 
 interface OperationsPageProps {
   onNavigate: (tab: string) => void;
@@ -61,8 +57,8 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
       num: '06',
       title: 'Class 1000 Automated Cleanroom Bottling',
       description:
-        'High-speed European monoblock rotary machines automatically wash, triple-rinse, fill, and torque tamper-evident caps at up to 15,000 units per hour without human intervention.',
-      badge: 'Touchless Cleanroom',
+        'High-speed 3-in-1 monoblock machines automatically rinse, fill and cap each bottle with a tamper-evident seal at up to 15,000 units per hour, supervised by trained operators in hairnets and uniforms.',
+      badge: 'Automated Filling',
     },
   ];
 
@@ -71,7 +67,7 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
       {/* Header Banner - Corporate Navy */}
       <section className="bg-gradient-to-b from-[#102A56] to-[#0D2144] text-white py-16 px-4 sm:px-8 text-center">
         <div className="max-w-4xl mx-auto space-y-4">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-blue-200 bg-white/10 border border-white/15 px-3.5 py-1 rounded-full">
+          <span className="text-[15px] font-bold uppercase tracking-wider text-blue-200 bg-white/10 border border-white/15 px-3.5 py-1 rounded-full">
             Engineering & Water Purification
           </span>
           <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
@@ -79,7 +75,7 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
           </h1>
           <p className="text-sm sm:text-base text-blue-100 max-w-2xl mx-auto leading-relaxed">
             Step inside Elim Table Water's automated production complex at Plot No. 188A, FCDA Scheme Extension III,
-            Kubwa, Abuja. See how multi-stage reverse osmosis and sterile cleanroom robotics guarantee purity.
+            Kubwa, Abuja. See how multi-stage reverse osmosis and automated bottling lines keep every drop pure.
           </p>
         </div>
       </section>
@@ -94,7 +90,7 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
             How Every Drop is Purified to Perfection
           </h2>
           <p className="text-xs sm:text-sm text-[#536174]">
-            From 180-meter deep rock aquifers to tamper-sealed packaging, no human hand touches your water.
+            From 180-meter deep rock aquifers to tamper-sealed packaging, every step is controlled and checked.
           </p>
         </div>
 
@@ -107,7 +103,7 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-[#2563D9]">{step.num}</span>
-                  <span className="text-[10px] font-semibold text-[#2563D9] bg-[#EAF4FF] px-2.5 py-0.5 rounded-full border border-blue-100">
+                  <span className="text-[15px] font-semibold text-[#2563D9] bg-[#EAF4FF] px-2.5 py-0.5 rounded-full border border-blue-100">
                     {step.badge}
                   </span>
                 </div>
@@ -132,7 +128,7 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
               </h2>
               <p className="text-sm text-[#536174] leading-relaxed">
                 Purity at Elim Table Water is never assumed. Our resident biochemists and quality analysts operate
-                an on-site laboratory certified by NAFDAC, performing real-time testing on every production run.
+                an on-site quality control laboratory, testing samples from every production run.
               </p>
 
               <div className="space-y-3">
@@ -142,7 +138,7 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
                   </div>
                   <div>
                     <h4 className="text-xs font-bold text-[#102A56]">Total Dissolved Solids (TDS) Monitoring</h4>
-                    <p className="text-[11px] text-[#536174]">
+                    <p className="text-[15px] text-[#536174]">
                       Calibrated continuously between 75 and 85 mg/L for pure clarity and light mineral crispness.
                     </p>
                   </div>
@@ -154,7 +150,7 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
                   </div>
                   <div>
                     <h4 className="text-xs font-bold text-[#102A56]">Zero Pathogen & Coliform Culture Plating</h4>
-                    <p className="text-[11px] text-[#536174]">
+                    <p className="text-[15px] text-[#536174]">
                       Microbial incubator cultures verify 0 CFU/mL for E. coli, Coliforms, and Pseudomonas aeruginosa.
                     </p>
                   </div>
@@ -166,7 +162,7 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
                   </div>
                   <div>
                     <h4 className="text-xs font-bold text-[#102A56]">Natural Alkaline pH 7.4 Stabilization</h4>
-                    <p className="text-[11px] text-[#536174]">
+                    <p className="text-[15px] text-[#536174]">
                       Electronically calibrated to bio-compatible pH 7.4 - 7.5 to support healthy systemic balance.
                     </p>
                   </div>
@@ -177,8 +173,8 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
             <div className="relative">
               <div className="rounded-2xl overflow-hidden shadow-md border border-[#E1E8F0] aspect-4/3">
                 <img
-                  src={qualityLabImg}
-                  alt="Quality Laboratory"
+                  src="/assets/aistudio/ESS07977_cb893eb1.jpg"
+                  alt="Elim Table Water Quality Control supervisor at her desk"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -204,82 +200,19 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
             </p>
           </div>
 
-          {/* 4 Feature Cards */}
+          {/* Feature Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-            {/* Card 1: Warehouse Storage Hall */}
-            <div className="bg-[#F5F7FA] rounded-2xl border border-[#E1E8F0] overflow-hidden shadow-2xs hover:shadow-md transition duration-200 flex flex-col group">
-              <div className="relative aspect-4/3 overflow-hidden bg-slate-200">
-                <img
-                  src="/assets/aistudio/ESS07859_0a5e6882.jpg"
-                  alt="Elim Table Water Climate-Controlled Warehouse Hall"
-                  className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                  loading="lazy"
-                />
-                <div className="absolute top-3 left-3 bg-[#102A56]/90 backdrop-blur-xs text-white text-[11px] font-semibold px-3 py-1 rounded-full">
-                  Finished Goods Depot
-                </div>
-              </div>
-              <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-3">
-                <div>
-                  <h3 className="text-lg sm:text-xl font-bold text-[#102A56]">
-                    Climate-Controlled Warehouse & Palletized Storage Hall
-                  </h3>
-                  <p className="text-xs font-semibold text-[#2563D9] mt-0.5">
-                    Observation View & High-Density Finished Inventory
-                  </p>
-                  <p className="text-xs sm:text-sm text-[#536174] mt-2.5 leading-relaxed">
-                    A panoramic view through observation clean glass into our expansive, high-ceiling storage facility.
-                    Pristine polished epoxy floors accommodate multi-tier palletized stacks of shrink-wrapped Elim bottled
-                    water under sterile air circulation, preserving seal freshness before dispatch.
-                  </p>
-                </div>
-                <div className="pt-3 border-t border-[#E1E8F0] flex items-center justify-between text-xs text-[#536174]">
-                  <span className="flex items-center gap-1.5 font-medium">
-                    <Warehouse className="w-3.5 h-3.5 text-[#2563D9]" />
-                    <span>200,000+ Pack Capacity</span>
-                  </span>
-                  <span className="font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
-                    ISO Monitored
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 2: Palletized Sachet Water Stock */}
-            <div className="bg-[#F5F7FA] rounded-2xl border border-[#E1E8F0] overflow-hidden shadow-2xs hover:shadow-md transition duration-200 flex flex-col group">
-              <div className="relative aspect-4/3 overflow-hidden bg-slate-200">
-                <img
-                  src="/assets/aistudio/ESS07947_3707c862.jpg"
-                  alt="Palletized Sachet Water Stock & Dispatch Staging"
-                  className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                  loading="lazy"
-                />
-                <div className="absolute top-3 left-3 bg-[#2563D9]/90 backdrop-blur-xs text-white text-[11px] font-semibold px-3 py-1 rounded-full">
-                  Warehouse & Logistics
-                </div>
-              </div>
-              <div className="p-6 sm:p-7 flex-1 flex flex-col space-y-3">
-                <h3 className="text-lg sm:text-xl font-bold text-[#102A56]">
-                  Palletized Sachet Water Stock & Dispatch Staging
-                </h3>
-                <p className="text-xs sm:text-sm text-[#536174] leading-relaxed">
-                  High-capacity plastic pallets loaded with Elim sachet water bags while warehouse staff coordinate
-                  outgoing batch release.
-                </p>
-              </div>
-            </div>
-
             {/* Card 3: Fleet Loading Bay */}
             <div className="bg-[#F5F7FA] rounded-2xl border border-[#E1E8F0] overflow-hidden shadow-2xs hover:shadow-md transition duration-200 flex flex-col group">
               <div className="relative aspect-4/3 overflow-hidden bg-slate-200">
                 <img
-                  src={fleetLoadingBayImg}
-                  alt="Fleet Dispatch Dock & Loading Bay 4"
+                  src="/assets/aistudio/ESS07979_98aff78b.jpg"
+                  alt="Elim staff loading bottled water pallets onto a delivery truck"
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                   loading="lazy"
                 />
-                <div className="absolute top-3 left-3 bg-[#102A56]/90 backdrop-blur-xs text-white text-[11px] font-semibold px-3 py-1 rounded-full">
-                  Loading Bay 4
+                <div className="absolute top-3 left-3 bg-[#102A56]/90 backdrop-blur-xs text-white text-[15px] font-semibold px-3 py-1 rounded-full">
+                  Loading Bay
                 </div>
               </div>
               <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-3">
@@ -291,8 +224,8 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
                     Order Verification & Quality Release Departure
                   </p>
                   <p className="text-xs sm:text-sm text-[#536174] mt-2.5 leading-relaxed">
-                    Direct access loading dock where dual electric haulers and express delivery vans are loaded under strict
-                    supervision. Operations supervisors cross-check batch numbers, QR manifest seals, and destination routes
+                    Loading area where our blue delivery trucks are packed with bottled water straight from pallets and
+                    trolleys under supervision. Operations supervisors cross-check batch numbers, QR manifest seals, and destination routes
                     before release for prompt doorstep arrival across Abuja.
                   </p>
                 </div>
@@ -312,12 +245,12 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
             <div className="bg-[#F5F7FA] rounded-2xl border border-[#E1E8F0] overflow-hidden shadow-2xs hover:shadow-md transition duration-200 flex flex-col group">
               <div className="relative aspect-4/3 overflow-hidden bg-slate-200">
                 <img
-                  src={rollerConveyorPackingImg}
-                  alt="Automated Roller Conveyor & Packaging Line"
+                  src="/assets/aistudio/ESS07853_92dc7a60.jpg"
+                  alt="Elim operator on the conveyor and shrink-wrap packaging line"
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                   loading="lazy"
                 />
-                <div className="absolute top-3 left-3 bg-[#2563D9]/90 backdrop-blur-xs text-white text-[11px] font-semibold px-3 py-1 rounded-full">
+                <div className="absolute top-3 left-3 bg-[#2563D9]/90 backdrop-blur-xs text-white text-[15px] font-semibold px-3 py-1 rounded-full">
                   Bottling & Packaging Train
                 </div>
               </div>
@@ -342,6 +275,86 @@ export const OperationsPage: React.FC<OperationsPageProps> = ({ onNavigate }) =>
                   </span>
                   <span className="font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
                     15,000 Bottles/Hr
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 5: Indoor cargo tricycle (warehouse to trucks) */}
+            <div className="bg-[#F5F7FA] rounded-2xl border border-[#E1E8F0] overflow-hidden shadow-2xs hover:shadow-md transition duration-200 flex flex-col group">
+              <div className="relative aspect-4/3 overflow-hidden bg-slate-200">
+                <img
+                  src="/assets/aistudio/ESS07873_d23163a2.jpg"
+                  alt="Elim operator driving a blue cargo tricycle inside the warehouse bay"
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                  loading="lazy"
+                />
+                <div className="absolute top-3 left-3 bg-[#102A56]/90 backdrop-blur-xs text-white text-[15px] font-semibold px-3 py-1 rounded-full">
+                  Indoor Haulage
+                </div>
+              </div>
+              <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-3">
+                <div>
+                  <h3 className="text-lg sm:text-xl font-bold text-[#102A56]">
+                    Indoor Cargo Tricycle & Warehouse Transfer
+                  </h3>
+                  <p className="text-xs font-semibold text-[#2563D9] mt-0.5">
+                    Moving Finished Stock from Warehouse to Waiting Trucks
+                  </p>
+                  <p className="text-xs sm:text-sm text-[#536174] mt-2.5 leading-relaxed">
+                    Inside the plant, our cargo tricycles carry freshly packed bottled water from the finished-goods
+                    warehouse to the delivery trucks waiting outside. This keeps stock moving quickly and safely across the
+                    site, cuts down on manual carrying, and gets each truck loaded and ready for dispatch sooner.
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-[#E1E8F0] flex items-center justify-between text-xs text-[#536174]">
+                  <span className="flex items-center gap-1.5 font-medium">
+                    <Truck className="w-3.5 h-3.5 text-[#2563D9]" />
+                    <span>Warehouse to Truck</span>
+                  </span>
+                  <span className="font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
+                    On-Site Transfer
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 7: Aerial view of the factory (full width) */}
+            <div className="md:col-span-2 bg-[#F5F7FA] rounded-2xl border border-[#E1E8F0] overflow-hidden shadow-2xs hover:shadow-md transition duration-200 flex flex-col group">
+              <div className="relative aspect-4/3 md:aspect-21/9 overflow-hidden bg-slate-200">
+                <img
+                  src="/assets/aistudio/elim-layout-1.jpg"
+                  srcSet="/assets/aistudio/elim-layout-1-1200.jpg 1200w, /assets/aistudio/elim-layout-1.jpg 2400w"
+                  sizes="(min-width: 768px) 90vw, 100vw"
+                  alt="Aerial view of the Elim Table Water factory complex with its blue roofs"
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                  loading="lazy"
+                />
+                <div className="absolute top-3 left-3 bg-[#102A56]/90 backdrop-blur-xs text-white text-[15px] font-semibold px-3 py-1 rounded-full">
+                  Factory Layout
+                </div>
+              </div>
+              <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-3">
+                <div>
+                  <h3 className="text-lg sm:text-xl font-bold text-[#102A56]">
+                    Elim Factory Complex — Aerial View
+                  </h3>
+                  <p className="text-xs font-semibold text-[#2563D9] mt-0.5">
+                    Production, Storage, Offices & Dispatch on One Site
+                  </p>
+                  <p className="text-xs sm:text-sm text-[#536174] mt-2.5 leading-relaxed">
+                    A bird's-eye view of our Kubwa facility. Production halls, warehouses, administrative offices and the
+                    loading yard all sit within one secured compound, so water moves from treatment to bottling, storage
+                    and dispatch without ever leaving the site.
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-[#E1E8F0] flex items-center justify-between text-xs text-[#536174]">
+                  <span className="flex items-center gap-1.5 font-medium">
+                    <Warehouse className="w-3.5 h-3.5 text-[#2563D9]" />
+                    <span>Kubwa, Abuja</span>
+                  </span>
+                  <span className="font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
+                    Integrated Facility
                   </span>
                 </div>
               </div>

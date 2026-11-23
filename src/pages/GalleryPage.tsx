@@ -29,7 +29,7 @@ export const GalleryPage: React.FC = () => {
     <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 py-12 space-y-10 bg-white">
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-[#2563D9] bg-[#EAF4FF] px-3 py-1 rounded-full border border-blue-100">
+        <span className="text-[15px] font-bold uppercase tracking-wider text-[#2563D9] bg-[#EAF4FF] px-3 py-1 rounded-full border border-blue-100">
           Gallery / Facilities
         </span>
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#102A56]">
@@ -79,7 +79,7 @@ export const GalleryPage: React.FC = () => {
                   item.fitWhole ? 'object-contain' : 'object-cover object-[center_20%]'
                 } group-hover:scale-105 transition-transform duration-300`}
               />
-              <span className="absolute top-3 left-3 bg-[#102A56]/90 backdrop-blur-xs text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-xs">
+              <span className="absolute top-3 left-3 bg-[#102A56]/90 backdrop-blur-xs text-white text-[15px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shadow-xs">
                 {item.category}
               </span>
               <div className="absolute top-3 right-3 p-2 rounded-lg bg-black/45 backdrop-blur-xs text-white opacity-0 group-hover:opacity-100 transition">
@@ -95,7 +95,7 @@ export const GalleryPage: React.FC = () => {
                   {item.description}
                 </p>
               </div>
-              <div className="pt-2 border-t border-[#E1E8F0]/70 flex items-center justify-between text-[11px] font-semibold text-[#2563D9]">
+              <div className="pt-2 border-t border-[#E1E8F0]/70 flex items-center justify-between text-[15px] font-semibold text-[#2563D9]">
                 <span>Click to Enlarge</span>
                 <ZoomIn className="w-3.5 h-3.5" />
               </div>

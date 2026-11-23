@@ -123,7 +123,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       <span className="text-xs font-bold text-[#102A56]">
                         ₦{(item.unitPrice * item.quantity).toLocaleString()}
                       </span>
-                      <span className="block text-[10px] text-[#536174]">
+                      <span className="block text-[15px] text-[#536174]">
                         ₦{item.unitPrice.toLocaleString()} each
                       </span>
                     </div>
@@ -163,7 +163,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   <Truck className="w-4 h-4 text-[#2563D9] shrink-0" />
                   <div className="min-w-0">
                     <p className="text-xs font-bold leading-none">Doorstep Fleet</p>
-                    <p className="text-[10px] text-[#536174] mt-0.5">Truck / Van Delivery</p>
+                    <p className="text-[15px] text-[#536174] mt-0.5">Truck / Van Delivery</p>
                   </div>
                 </button>
 
@@ -179,7 +179,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   <Store className="w-4 h-4 text-[#2563D9] shrink-0" />
                   <div className="min-w-0">
                     <p className="text-xs font-bold leading-none">Factory Collection</p>
-                    <p className="text-[10px] text-[#536174] mt-0.5">Self-pickup (Gate B)</p>
+                    <p className="text-[15px] text-[#536174] mt-0.5">Self-pickup (Gate B)</p>
                   </div>
                 </button>
               </div>
@@ -202,7 +202,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </span>
               </div>
               {deliveryMethod === 'DELIVERY' && subtotal < FREE_DELIVERY_THRESHOLD && (
-                <p className="text-[11px] text-[#2563D9]">
+                <p className="text-[15px] text-[#2563D9]">
                   💡 Tip: Orders of ₦{FREE_DELIVERY_THRESHOLD.toLocaleString()} and above qualify for free factory fleet delivery!
                 </p>
               )}
@@ -212,7 +212,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               </div>
             </div>
 
-            <div className="text-[11px] text-[#536174] flex items-start gap-1.5 bg-[#EAF4FF] p-2.5 rounded-lg border border-[#2563D9]/20">
+            <div className="text-[15px] text-[#536174] flex items-start gap-1.5 bg-[#EAF4FF] p-2.5 rounded-lg border border-[#2563D9]/20">
               <AlertCircle className="w-3.5 h-3.5 text-[#2563D9] shrink-0 mt-0.5" />
               <span>
                 Booking is subject to review and stock confirmation by our factory order desk. No

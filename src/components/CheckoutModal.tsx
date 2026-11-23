@@ -195,7 +195,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     {copiedRef ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
                   </button>
                 </div>
-                <p className="text-[11px] text-slate-400 mt-1">
+                <p className="text-[15px] text-slate-400 mt-1">
                   Please keep this reference number to track status or quote during customer calls.
                 </p>
               </div>
@@ -467,7 +467,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     name="specialInstructions"
                     value={formData.specialInstructions}
                     onChange={handleInputChange}
-                    placeholder="e.g. Empty 19L bottles ready for swap, gate pass clearance, contact alternate security number"
+                    placeholder="e.g. Empty 18.9L jars ready for swap, gate pass clearance, contact alternate security number"
                     className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none"
                   />
                 </div>

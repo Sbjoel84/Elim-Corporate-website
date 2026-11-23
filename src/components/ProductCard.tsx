@@ -31,25 +31,30 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <div className="bg-white rounded-2xl border border-[#E1E8F0] hover:border-[#2563D9]/50 hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden group">
       {/* Image Container */}
-      <div className="relative aspect-4/3 overflow-hidden bg-[#F5F7FA]">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
+      <div className="relative p-3 pb-0">
+        {/* Badges sit above the image so they never cover the flier */}
+        <div className="flex items-center justify-between gap-2 mb-2.5">
+          {/* Category Badge */}
+          <span className="bg-[#102A56] text-white text-[15px] font-medium px-2.5 py-0.5 rounded-md">
+            {product.category}
+          </span>
 
-        {/* Category Badge */}
-        <span className="absolute top-3 left-3 bg-[#102A56]/85 backdrop-blur-xs text-white text-[11px] font-medium px-2.5 py-0.5 rounded-md">
-          {product.category}
-        </span>
+          {/* Stock Status Badge */}
+          <span
+            className={`text-[15px] font-semibold px-2 py-0.5 rounded-md border ${stockStatusBadge.className}`}
+          >
+            {stockStatusBadge.label}
+          </span>
+        </div>
 
-        {/* Stock Status Badge */}
-        <span
-          className={`absolute top-3 right-3 text-[11px] font-semibold px-2 py-0.5 rounded-md border ${stockStatusBadge.className}`}
-        >
-          {stockStatusBadge.label}
-        </span>
+        {/* Square frame matches the 1:1 fliers so the whole image shows */}
+        <div className="relative aspect-square rounded-xl overflow-hidden bg-[#F5F7FA]">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
 
         {/* Quick View Button */}
         <button
@@ -59,6 +64,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         >
           <Eye className="w-4 h-4" />
         </button>
+        </div>
       </div>
 
       {/* Content */}
@@ -66,11 +72,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <div>
           {/* Header & Title */}
           <div className="flex items-center gap-2 text-xs text-[#536174] mb-1">
-            <span className="font-mono text-[10px] text-slate-400">SKU: {product.sku}</span>
+            <span className="font-mono text-[15px] text-slate-400">SKU: {product.sku}</span>
             {product.phLevel && (
               <>
                 <span>•</span>
-                <span className="text-[#2563D9] font-medium">pH {product.phLevel} Pure Mineral</span>
+                <span className="text-[#2563D9] font-medium">pH {product.phLevel} · Purified</span>
               </>
             )}
           </div>
@@ -92,7 +98,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {/* Variant Selector if more than 1 */}
           {product.variants.length > 1 ? (
             <div>
-              <label className="block text-[11px] font-semibold text-[#102A56] mb-1">
+              <label className="block text-[15px] font-semibold text-[#102A56] mb-1">
                 Select Packaging / Pack Size:
               </label>
               <select
@@ -129,7 +135,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             </div>
 
             {selectedVariant.wholesalePrice && (
-              <span className="text-[10px] text-[#2563D9] bg-[#EAF4FF] px-2 py-0.5 rounded font-semibold border border-blue-100">
+              <span className="text-[15px] text-[#2563D9] bg-[#EAF4FF] px-2 py-0.5 rounded font-semibold border border-blue-100">
                 Wholesale: ₦{selectedVariant.wholesalePrice.toLocaleString()}
               </span>
             )}

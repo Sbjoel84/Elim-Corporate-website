@@ -10,79 +10,44 @@ interface HeroSlide {
   productId: string;
   /** Show the whole photo (for tall shots) over a blurred copy, instead of cropping. */
   fitWhole?: boolean;
+  /** Designed product flier: shown uncropped, without zoom or dark scrim. */
+  isFlier?: boolean;
 }
 
-// Real Elim product photos only: each product, then its finished-goods stock.
+// Each product's designed flier.
 const HERO_PRODUCT_SLIDES: HeroSlide[] = [
   {
     id: 'sachet',
     label: 'Sachet Water',
     title: 'Elim Pure Flow Sachet Water',
     subtitle: '50cl Crystal-Clear UV & Ozone Sterilized Packs',
-    imageUrl: '/assets/aistudio/ESS07833_6bee5d2d.jpg',
+    imageUrl: '/assets/aistudio/elim-sachet-water.png',
     productId: 'prod-sachet-01',
-  },
-  {
-    id: 'sachet-stock-1',
-    label: 'Sachet Water Stock',
-    title: 'Elim Sachet Water Stock',
-    subtitle: '',
-    imageUrl: '/assets/aistudio/ESS07834_eb5d98d0.jpg',
-    productId: 'prod-sachet-01',
-  },
-  {
-    id: 'sachet-stock-2',
-    label: 'Sachet Water Stock',
-    title: 'Elim Sachet Water Stock',
-    subtitle: '',
-    imageUrl: '/assets/aistudio/ESS07947_3707c862.jpg',
-    productId: 'prod-sachet-01',
+    isFlier: true,
   },
   {
     id: 'bottled',
     label: 'Bottled Water',
     title: 'All Sizes of Bottled Table Water',
     subtitle: '500ml, 750ml Active Sports & 1.5L Family Packs',
-    imageUrl: '/assets/aistudio/ESS07910_42d1ee19.jpg',
+    imageUrl: '/assets/aistudio/elim-bottled-water.png',
     productId: 'prod-bottle-1500',
+    isFlier: true,
   },
   {
-    id: 'bottled-stock-1',
-    label: 'Bottled Water Stock',
-    title: 'Elim Bottled Water Stock',
-    subtitle: '',
-    imageUrl: '/assets/aistudio/ESS07858_e0d82076.jpg',
-    productId: 'prod-bottle-1500',
-  },
-  {
-    id: 'bottled-stock-2',
-    label: 'Bottled Water Stock',
-    title: 'Elim Bottled Water Stock',
-    subtitle: '',
-    imageUrl: '/assets/aistudio/ESS07859_0a5e6882.jpg',
-    productId: 'prod-bottle-1500',
-  },
-  {
-    id: 'bottled-stock-3',
-    label: 'Bottled Water Stock',
-    title: 'Elim Bottled Water Stock',
-    subtitle: '',
-    imageUrl: '/assets/aistudio/ESS07989_05ef32ab.jpg',
-    productId: 'prod-bottle-1500',
-  },
-  {
-    id: 'dispenser-stock-2',
-    label: 'Dispenser Water Stock',
-    title: 'Elim 19L Dispenser Jars',
-    subtitle: '',
-    imageUrl: '/assets/aistudio/ESS07944_5d5eefdb.jpg',
+    id: 'dispenser',
+    label: 'Dispenser Water',
+    title: 'Elim 18.9L Dispenser Jar',
+    subtitle: 'Tamper-Sealed Jars for Homes & Offices',
+    imageUrl: '/assets/aistudio/elim-dispenser-jar.png',
     productId: 'prod-dispenser-19l',
+    isFlier: true,
   },
   {
     id: 'collection',
     label: 'Full Range',
     title: 'Elim Table Water — Quality You Trust',
-    subtitle: 'NAFDAC Certified Purity Delivered Across Abuja',
+    subtitle: 'NAFDAC Registered Purity Delivered Across Abuja',
     imageUrl: '/assets/aistudio/image_6cafc13e.png',
     productId: 'prod-dispenser-19l',
   },
@@ -127,15 +92,17 @@ export const HeroProductShowcase: React.FC<HeroProductShowcaseProps> = ({
       {/* 30% OFFER Floating Circular Badge */}
       <div className="absolute -top-3 -left-3 z-30 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white text-[#102A56] shadow-md flex flex-col items-center justify-center border-2 border-[#2563D9] transform -rotate-6 hover:rotate-0 transition">
         <span className="text-xs sm:text-sm font-extrabold leading-none text-[#102A56]">30%</span>
-        <span className="text-[10px] sm:text-xs font-bold uppercase text-[#2563D9] leading-tight">
+        <span className="text-[15px] sm:text-xs font-bold uppercase text-[#2563D9] leading-tight">
           OFFER
         </span>
       </div>
 
       {/* View Official Product Flyer Button */}
       <button
-        onClick={() => onOpenFlyer('/assets/aistudio/image_6cafc13e.png')}
-        className="absolute top-3 right-3 z-30 px-3 py-1.5 rounded-full bg-[#102A56]/90 hover:bg-[#102A56] text-white text-[11px] font-semibold backdrop-blur-md border border-white/25 shadow-md flex items-center gap-1.5 transition cursor-pointer hover:scale-105"
+        onClick={() =>
+          onOpenFlyer(activeSlide.isFlier ? activeSlide.imageUrl : '/assets/aistudio/image_6cafc13e.png')
+        }
+        className="absolute top-3 right-3 z-30 px-3 py-1.5 rounded-full bg-[#102A56]/90 hover:bg-[#102A56] text-white text-[15px] font-semibold backdrop-blur-md border border-white/25 shadow-md flex items-center gap-1.5 transition cursor-pointer hover:scale-105"
         title="Click to view full official flyer"
       >
         <Sparkles className="w-3.5 h-3.5 text-[#60A5FA]" />
@@ -168,10 +135,14 @@ export const HeroProductShowcase: React.FC<HeroProductShowcaseProps> = ({
                 alt={slide.title}
                 className={`relative w-full h-full ${
                   slide.fitWhole ? 'object-contain pt-6 pb-32' : 'object-cover object-center'
-                } transition-transform duration-[3600ms] ease-linear ${isActive ? 'scale-105' : 'scale-100'}`}
+                } transition-transform duration-[3600ms] ease-linear ${
+                  isActive && !slide.isFlier ? 'scale-105' : 'scale-100'
+                }`}
               />
-              {/* Subtle Bottom & Top Scrim for Tag Readability */}
-              <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#102A56]/75 via-[#102A56]/20 to-transparent pointer-events-none" />
+              {/* Subtle Bottom Scrim for Tag Readability (fliers keep their own colours) */}
+              {!slide.isFlier && (
+                <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#102A56]/75 via-[#102A56]/20 to-transparent pointer-events-none" />
+              )}
             </div>
           );
         })}
@@ -197,7 +168,7 @@ export const HeroProductShowcase: React.FC<HeroProductShowcaseProps> = ({
         {/* Active Product Caption & Slide Switcher Dots */}
         <div className="absolute bottom-14 left-3 right-3 z-20 flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#102A56]/85 backdrop-blur-sm text-white text-[10px] sm:text-[11px] font-semibold border border-white/15">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#102A56]/85 backdrop-blur-sm text-white text-[15px] sm:text-[15px] font-semibold border border-white/15">
               <span className="w-1.5 h-1.5 rounded-full bg-[#60A5FA] animate-pulse" />
               {activeSlide.title}
             </span>
@@ -229,7 +200,7 @@ export const HeroProductShowcase: React.FC<HeroProductShowcaseProps> = ({
           />
           <div className="min-w-0">
             <p className="text-xs font-bold text-[#102A56] truncate">Elim Table Water Products</p>
-            <p className="text-[11px] text-[#2563D9] font-medium truncate">
+            <p className="text-[15px] text-[#2563D9] font-medium truncate">
               Sachet, Bottled (All Sizes) & Dispenser Water
             </p>
           </div>

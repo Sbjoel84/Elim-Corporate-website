@@ -105,19 +105,19 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               </div>
               <div className="grid grid-cols-2 gap-2 text-[#536174]">
                 <div className="bg-white p-2 rounded-lg border border-[#E1E8F0]">
-                  <span className="block text-[10px] text-[#536174]">pH Alkaline Balance</span>
+                  <span className="block text-[15px] text-[#536174]">pH Alkaline Balance</span>
                   <span className="font-bold text-[#102A56]">{product.phLevel || '7.4 - 7.5'}</span>
                 </div>
                 <div className="bg-white p-2 rounded-lg border border-[#E1E8F0]">
-                  <span className="block text-[10px] text-[#536174]">Total Dissolved Solids</span>
+                  <span className="block text-[15px] text-[#536174]">Total Dissolved Solids</span>
                   <span className="font-bold text-[#102A56]">{product.tdsLevel || '78 - 85 ppm'}</span>
                 </div>
                 <div className="bg-white p-2 rounded-lg border border-[#E1E8F0]">
-                  <span className="block text-[10px] text-[#536174]">Microbial Coliform</span>
+                  <span className="block text-[15px] text-[#536174]">Microbial Coliform</span>
                   <span className="font-bold text-emerald-600">0.00 CFU/100ml</span>
                 </div>
                 <div className="bg-white p-2 rounded-lg border border-[#E1E8F0]">
-                  <span className="block text-[10px] text-[#536174]">Sterilization Method</span>
+                  <span className="block text-[15px] text-[#536174]">Sterilization Method</span>
                   <span className="font-bold text-[#102A56]">UV-C + Ozonation</span>
                 </div>
               </div>
@@ -156,9 +156,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                             ₦{v.price.toLocaleString()}
                           </span>
                         </div>
-                        <p className="text-[11px] text-[#536174] mt-0.5">{v.packaging}</p>
+                        <p className="text-[15px] text-[#536174] mt-0.5">{v.packaging}</p>
                         {v.wholesalePrice && (
-                          <p className="text-[10px] text-emerald-700 font-semibold mt-1">
+                          <p className="text-[15px] text-emerald-700 font-semibold mt-1">
                             Wholesale tier (5+ units): ₦{v.wholesalePrice.toLocaleString()}
                           </p>
                         )}

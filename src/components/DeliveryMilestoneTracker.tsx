@@ -113,7 +113,7 @@ export const DeliveryMilestoneTracker: React.FC<DeliveryMilestoneTrackerProps> =
             <h4 className="text-xs sm:text-sm font-bold text-rose-900">
               Order {order.status === 'REJECTED' ? 'Declined' : 'Cancelled'}
             </h4>
-            <p className="text-[11px] text-rose-700">
+            <p className="text-[15px] text-rose-700">
               Fulfillment progress has stopped at this stage.
             </p>
           </div>
@@ -123,7 +123,7 @@ export const DeliveryMilestoneTracker: React.FC<DeliveryMilestoneTrackerProps> =
             <strong className="font-semibold">Reason:</strong> {order.rejectionReason}
           </p>
         )}
-        <p className="text-[11px] text-[#536174]">
+        <p className="text-[15px] text-[#536174]">
           Please contact our customer support desk on +2348166399794 if you need assistance.
         </p>
       </div>
@@ -139,7 +139,7 @@ export const DeliveryMilestoneTracker: React.FC<DeliveryMilestoneTrackerProps> =
       {/* Tracker Header */}
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-[#2563D9] block">
+          <span className="text-[15px] font-bold uppercase tracking-widest text-[#2563D9] block">
             Delivery Milestone Tracker
           </span>
           <h4 className="text-sm font-bold text-[#102A56]">
@@ -207,11 +207,11 @@ export const DeliveryMilestoneTracker: React.FC<DeliveryMilestoneTrackerProps> =
                   >
                     {step.title}
                   </p>
-                  <p className="text-[10px] text-[#536174] mt-0.5 leading-tight px-1">
+                  <p className="text-[15px] text-[#536174] mt-0.5 leading-tight px-1">
                     {step.subtitle}
                   </p>
                   {timestamp && (idx <= activeIndex) && (
-                    <span className="mt-1 inline-flex items-center gap-0.5 text-[9px] font-medium text-[#2563D9] bg-white px-1.5 py-0.5 rounded border border-[#E1E8F0]">
+                    <span className="mt-1 inline-flex items-center gap-0.5 text-[15px] font-medium text-[#2563D9] bg-white px-1.5 py-0.5 rounded border border-[#E1E8F0]">
                       <Clock className="w-2.5 h-2.5" />
                       {timestamp}
                     </span>
@@ -269,10 +269,10 @@ export const DeliveryMilestoneTracker: React.FC<DeliveryMilestoneTrackerProps> =
                     {step.title}
                   </p>
                   {timestamp && idx <= activeIndex && (
-                    <span className="text-[10px] text-[#2563D9] font-medium">{timestamp}</span>
+                    <span className="text-[15px] text-[#2563D9] font-medium">{timestamp}</span>
                   )}
                 </div>
-                <p className="text-[11px] text-[#536174]">{step.subtitle}</p>
+                <p className="text-[15px] text-[#536174]">{step.subtitle}</p>
               </div>
             </div>
           );
@@ -290,7 +290,7 @@ export const DeliveryMilestoneTracker: React.FC<DeliveryMilestoneTrackerProps> =
                 {latestHistoryNote.notes || `Order updated to ${order.status.replace(/_/g, ' ')}`}
               </span>
             </p>
-            <p className="text-[10px] text-[#536174] mt-0.5">
+            <p className="text-[15px] text-[#536174] mt-0.5">
               Updated{' '}
               {formatShortTime(latestHistoryNote.changedAt)}
             </p>

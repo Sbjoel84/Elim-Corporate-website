@@ -24,7 +24,7 @@ export const FAQ_DATA: FAQItem[] = [
   {
     id: 'order-how-to-place',
     category: 'ordering',
-    question: 'How do I place an order for bottled, sachet, or 19L dispenser water?',
+    question: 'How do I place an order for bottled, sachet, or 18.9L dispenser water?',
     answer: (
       <div className="space-y-2">
         <p>You can order Elim Table Water in three convenient ways:</p>
@@ -41,12 +41,12 @@ export const FAQ_DATA: FAQItem[] = [
     category: 'ordering',
     question: 'What is the minimum order quantity (MOQ) for doorstep delivery?',
     answer:
-      'For residential and corporate doorstep delivery within Abuja, our minimum order quantity is 2 refill dispenser jars (19L) or 5 packs of bottled/sachet water. Orders of ₦150,000 and above qualify for completely free factory fleet truck delivery across Abuja FCT.',
+      'For residential and corporate doorstep delivery within Abuja, our minimum order quantity is 2 refill dispenser jars (18.9L) or 5 packs of bottled/sachet water. Orders of ₦150,000 and above qualify for completely free factory fleet truck delivery across Abuja FCT.',
   },
   {
     id: 'order-bottle-swap',
     category: 'ordering',
-    question: 'Can I swap my existing 19L dispenser bottles from another brand?',
+    question: 'Can I swap my existing 18.9L dispenser bottles from another brand?',
     answer:
       'Yes! We accept standard 19-litre (5-gallon) food-grade polycarbonate bottles in good, clean condition for direct swap. When our fleet driver delivers your order, they will inspect and take your empty bottles and swap them with freshly sanitized, hermetically sealed Elim Table Water jars.',
   },
@@ -78,7 +78,7 @@ export const FAQ_DATA: FAQItem[] = [
     category: 'quality',
     question: 'Is Elim Table Water certified by NAFDAC and Nigerian health regulators?',
     answer:
-      'Yes. Elim Table Water is fully certified and registered with NAFDAC under Registration Number 01-8422. We strictly conform to the Standards Organisation of Nigeria (SON) NIS 306 benchmarks and World Health Organization (WHO) drinking water standards.',
+      'Yes. Elim Table Water is registered with NAFDAC under Registration Number 01-8422 and carries the SON MANCAP certification (No. FT-31609). We strictly conform to the Standards Organisation of Nigeria (SON) NIS 306 benchmarks and World Health Organization (WHO) drinking water standards.',
   },
   {
     id: 'quality-ph-minerals',
@@ -90,7 +90,7 @@ export const FAQ_DATA: FAQItem[] = [
   {
     id: 'quality-hygiene-bottles',
     category: 'quality',
-    question: 'How do you clean and sterilize 19L reusable dispenser jars?',
+    question: 'How do you clean and sterilize 18.9L reusable dispenser jars?',
     answer:
       'Before every refill, each jar undergoes automated high-pressure interior caustic scrubbing, pressurized hot water sterilization, food-grade antimicrobial sanitization, and a final rinse with pure RO water in our cleanroom line. Jars are sealed with tamper-evident induction cap seals.',
   },
@@ -307,7 +307,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
                 >
                   <div className="space-y-1.5 flex-1 pr-2">
                     <span
-                      className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border inline-block ${categoryBadge.bg}`}
+                      className={`text-[15px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border inline-block ${categoryBadge.bg}`}
                     >
                       {categoryBadge.label}
                     </span>
@@ -347,7 +347,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
           <h4 className="text-base sm:text-lg font-bold text-[#102A56]">
             Have a question that is not answered here?
           </h4>
-          <p className="text-xs sm:text-[13px] text-[#536174] max-w-xl">
+          <p className="text-xs sm:text-[16px] text-[#536174] max-w-xl">
             Our customer care desk at Kubwa plant is available 6 days a week to clarify custom bulk event volumes, distributor margins, and contract terms.
           </p>
         </div>

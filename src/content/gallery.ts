@@ -1,5 +1,4 @@
 import type { GalleryItem } from '../../shared/types';
-import galleryRollerHallImg from '../assets/images/regenerated_image_1794869856806.jpg';
 
 // Photos shown on the Gallery page. Edit this file to add or remove photos.
 const GALLERY_ITEMS: GalleryItem[] = [
@@ -32,13 +31,6 @@ const GALLERY_ITEMS: GalleryItem[] = [
     description: 'Senior management and operations leads standing together outside the Elim Table Water administrative building in Kubwa, Abuja.',
   },
   {
-    id: 'gal-new-01',
-    title: 'Good-to-Go Finished Bottled Water Warehouse Stacks',
-    category: 'Warehouse & Logistics',
-    imageUrl: '/assets/aistudio/ESS07989_05ef32ab.jpg',
-    description: 'Quality-cleared packs of Elim Table Water neatly stacked in the Good-to-Go dispatch bay awaiting loading onto delivery vehicles.',
-  },
-  {
     id: 'gal-new-02',
     title: 'Warehouse 1',
     category: 'Warehouse & Logistics',
@@ -46,25 +38,11 @@ const GALLERY_ITEMS: GalleryItem[] = [
     description: 'Warehouse office managing finished-goods stock records, transfers from production and documentation for outgoing dispatch.',
   },
   {
-    id: 'gal-new-03',
-    title: 'Van Dispatch & Direct Route Loading',
-    category: 'Fleet & Logistics',
-    imageUrl: '/assets/aistudio/ESS07838_25deb53f.jpg',
-    description: 'Regional fleet drivers and logistics officers inspecting and loading Elim bottled water packs into delivery vans for door-to-door distribution across Abuja.',
-  },
-  {
     id: 'gal-new-04',
     title: 'Brand Ambassador with 18.9L Dispenser Bottle',
     category: 'Team & Leadership',
     imageUrl: '/assets/aistudio/ESS07846_ecabbb34.jpg',
-    description: 'Official Elim Table Water brand ambassador showcasing our hermetically sealed, NAFDAC-certified 18.9-liter polycarbonate dispenser jar.',
-  },
-  {
-    id: 'gal-new-05',
-    title: 'Automated Conveyor & Shrink-Wrap Packaging Line',
-    category: 'Bottling Line',
-    imageUrl: '/assets/aistudio/ESS07853_92dc7a60.jpg',
-    description: 'Plant technician in cleanroom attire guiding sealed Elim PET bottles along the high-speed automated conveyor and heat-shrink bundling tunnel.',
+    description: 'Official Elim Table Water brand ambassador showcasing our sealed, NAFDAC-registered 18.9-litre dispenser jar.',
   },
   {
     id: 'gal-new-08',
@@ -85,7 +63,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
     title: 'Dispatch Rider & Local Fleet Operations',
     category: 'Fleet & Logistics',
     imageUrl: '/assets/aistudio/ESS07882_8dd301ae.jpg',
-    description: 'Uniformed fleet operator ready for dispatch aboard Elim Table Water’s rapid cargo trikes serving Kubwa, Dutse, and surrounding districts.',
+    description: 'Uniformed fleet operator standing between two of Elim Table Water’s blue cargo tricycles that serve Kubwa, Dutse and surrounding districts.',
   },
   {
     id: 'gal-new-11',
@@ -116,109 +94,42 @@ const GALLERY_ITEMS: GalleryItem[] = [
     description: 'Senior Quality Control supervisor overseeing daily batch water testing, sanitary compliance, and laboratory release workflows.',
   },
   {
-    id: 'gal-01',
-    title: 'Automated 19L Dispenser Bottle Washing & Sterilization Dock',
-    category: 'Factory Plant',
-    imageUrl: '/assets/aistudio/ESS07939_37171100.jpg',
-    description: 'Cleanroom technicians operating our multi-stage high-pressure interior washing and exterior sanitization line for 18.9L polycarbonate bottles.',
-  },
-  {
-    id: 'gal-02',
-    title: '3-in-1 Automated Rinsing, Filling & Capping Carousel',
-    category: 'Bottling Line',
-    imageUrl: '/assets/aistudio/ESS07903_cceef1e2.jpg',
-    description: 'Uniformed cleanroom technicians overseeing the 3-in-1 stainless steel automated bottle rinsing, filling, and capping monoblock line.',
-  },
-  {
     id: 'gal-03',
     title: 'Dual-Operator Bottling Line & Quality Supervision',
-    category: 'QA & Lab',
+    category: 'Bottling Line',
     imageUrl: '/assets/aistudio/ESS07856_4f774b9f.jpg',
-    description: 'Cleanroom quality specialists overseeing bottle alignment, label integrity, and automated shrink-wrap sealing on the high-speed line.',
-  },
-  {
-    id: 'gal-04',
-    title: 'Elim Water Regional Dispatch Fleet at Loading Bay',
-    category: 'Fleet & Logistics',
-    imageUrl: '/assets/aistudio/ESS07967_563ed1c1.jpg',
-    description: 'Logistics crew loading hermetically sealed 18.9L Elim dispenser jars into our blue Toyota delivery truck at the loading bay.',
-  },
-  {
-    id: 'gal-05',
-    title: 'Main Bottling Hall Roller Conveyor & Pallet Stacking',
-    category: 'Factory Plant',
-    imageUrl: galleryRollerHallImg,
-    description: 'Continuous roller conveyor transporting shrink-wrapped Elim bottled water cartons into structured floor stacks for distribution.',
-  },
-  {
-    id: 'gal-06',
-    title: '18.9L Dispenser Bottle Sanitization & Filling Line',
-    category: 'Production Department',
-    imageUrl: '/assets/aistudio/ESS07944_5d5eefdb.jpg',
-    description: 'Production team managing automatic high-pressure bottle washing, sterilization, and conveyor feeding in the dispenser cleanroom hall.',
+    description: 'Two operators in hairnets checking bottles on the conveyor as they move into the automatic shrink-wrap machine.',
   },
   {
     id: 'gal-prod-19l',
-    title: '18.9L Tamper-Sealed Dispenser Bottle & SON Certification',
-    category: 'QA & Lab',
-    imageUrl: '/assets/aistudio/ESS07830_fbde1bf0.jpg',
-    description: 'Close-up of the 18.9L Elim Table Water polycarbonate jar displaying NAFDAC Reg No. A1-5385, SON MANCAP FT-31611 mark, and neck seal.',
+    title: 'Elim 18.9L Dispenser Water',
+    category: 'Production Department',
+    imageUrl: '/assets/aistudio/elim-dispenser-jar.png',
+    fitWhole: true,
+    description: 'Large 18.9L Elim Table Water jars for water dispensers, giving homes and offices long-lasting, refreshing drinking water.',
   },
   {
     id: 'gal-prod-sachet',
-    title: 'Elim 50cl Pure Flow Sachet Water Unit',
+    title: 'Elim Sachet Water',
     category: 'Production Department',
-    imageUrl: '/assets/aistudio/ESS07833_6bee5d2d.jpg',
-    description: 'Crystal-clear 50cl Elim Table Water sachet sealed with food-grade film, featuring NAFDAC Reg No. 01-0225L and SON certification.',
-  },
-  {
-    id: 'gal-wh-sachet',
-    title: 'Bulk 50cl Sachet Water Storage & Dispatch Staging',
-    category: 'Warehouse & Logistics',
-    imageUrl: '/assets/aistudio/ESS07834_eb5d98d0.jpg',
-    description: 'Organized bags of freshly produced Elim 50cl sachet water staged on clean epoxy flooring ready for wholesale distributor loading.',
-  },
-  {
-    id: 'gal-fleet-van-sachet',
-    title: 'Dispatch Van Loading — Sachet & Bottled Water',
-    category: 'Fleet & Logistics',
-    imageUrl: '/assets/aistudio/ESS07837_cc1dba7f.jpg',
-    description: 'Field dispatch personnel loading both Elim sachet bundles and bottled water cartons into express vans for morning delivery routes.',
-  },
-  {
-    id: 'gal-prod-blow-01',
-    title: 'In-House PET Bottle Blow-Molding Operations',
-    category: 'Production Department',
-    imageUrl: '/assets/aistudio/ESS07849_1db2e07c.jpg',
-    description: 'Technical operators producing food-grade PET bottles in-house using automated blow-molding presses for sterile bottle availability.',
-  },
-  {
-    id: 'gal-plant-blow-02',
-    title: 'Automated PET Preform & Bottle Blowing Line',
-    category: 'Factory Plant',
-    imageUrl: '/assets/aistudio/ESS07851_0b094188.jpg',
-    description: 'Dedicated PET bottle manufacturing bay feeding crystal-clear freshly blown bottles directly toward the sanitization and filling hall.',
+    imageUrl: '/assets/aistudio/elim-sachet-water.png',
+    fitWhole: true,
+    description: 'Affordable 50cl Elim Table Water sachets sealed in food-grade film, serving workshops, markets, rural areas and the wider public.',
   },
   {
     id: 'gal-fleet-van-full',
     title: 'Express Delivery Van Packed for Abuja Routes',
     category: 'Fleet & Logistics',
     imageUrl: '/assets/aistudio/ESS07870_b2202a27.jpg',
-    description: 'Logistics team verifying packed cartons of Elim bottled table water inside a high-capacity express van ahead of dispatch.',
+    description: 'Two staff members checking packs of Elim bottled water loaded in a delivery van before it leaves for customer routes.',
   },
   {
     id: 'gal-prod-1500-portrait',
-    title: 'Elim 1.5L Family Table Water Bottle (NAFDAC Certified)',
+    title: 'Elim Bottled Water',
     category: 'Production Department',
-    imageUrl: '/assets/aistudio/ESS07909_60eee3e5.jpg',
-    description: 'Crystal-clear 1.5-liter Elim Table Water bottle engineered for dining tables, households, and corporate hospitality suites.',
-  },
-  {
-    id: 'gal-prod-1500-wide',
-    title: 'Elim 1.5L Natural Mineral Table Water Showcase',
-    category: 'Production Department',
-    imageUrl: '/assets/aistudio/ESS07910_42d1ee19.jpg',
-    description: 'Pure 1.5L Elim Table Water highlighting our crisp label design, ergonomic grip contours, and NAFDAC quality registration.',
+    imageUrl: '/assets/aistudio/elim-bottled-water.png',
+    fitWhole: true,
+    description: 'Pure, safe and refreshing Elim Table Water in portable bottles from 35cl to 1.5L, ideal for homes, offices, events and on the go.',
   },
   {
     id: 'gal-plant-plaque',
@@ -228,74 +139,39 @@ const GALLERY_ITEMS: GalleryItem[] = [
     description: 'Commemorative granite dedication plaque celebrating the commissioning of the expanded Elim Table Water Kubwa bottling complex on 4th May 2026.',
   },
   {
-    id: 'gal-plant-blow-auto',
-    title: 'PLC-Controlled Automatic PET Blow-Molding Unit',
-    category: 'Factory Plant',
-    imageUrl: '/assets/aistudio/ESS07916_774f3002.jpg',
-    description: 'Modern PLC touchscreen-controlled automatic bottle blowing system producing uniform, hygienic PET containers at industrial speed.',
-  },
-  {
-    id: 'gal-team-accounts',
-    title: 'Accounts & Commercial Order Desk Supervisor',
-    category: 'Finance/Account',
-    imageUrl: '/assets/aistudio/ESS07924_7ce8501f.jpg',
-    description: 'Commercial accounts officer verifying wholesale distributor ledgers, invoice settlements, and daily plant order manifests.',
-  },
-  {
-    id: 'gal-team-finance',
-    title: 'Finance & Commercial Administration Desk',
-    category: 'Finance/Account',
-    imageUrl: '/assets/aistudio/ESS07928_7722485a.jpg',
-    description: 'Finance administrator overseeing distributor billing, payment reconciliation, and corporate account inquiries at Kubwa headquarters.',
-  },
-  {
     id: 'gal-team-office',
     title: 'Kubwa Plant Administrative & Accounts Office',
     category: 'Finance/Account',
     imageUrl: '/assets/aistudio/ESS07933_baa3bbd3.jpg',
-    description: 'Synchronized finance and commercial operations team working inside the administrative office to clear orders for warehouse dispatch.',
+    description: 'Administrative and accounts staff at work in the plant office, handling records, payments and customer orders.',
   },
   {
     id: 'gal-bottle-19l-conveyor',
     title: '18.9L Dispenser Jar Conveyor Intake & Handling',
     category: 'Bottling Line',
     imageUrl: '/assets/aistudio/ESS07970_39dcd5d1.jpg',
-    description: 'Cleanroom operator positioning sanitized 18.9-liter polycarbonate jars onto the stainless steel chain conveyor toward filling and capping.',
+    description: 'Operator in a hairnet placing an 18.9-litre jar onto the conveyor that carries it to washing, filling and capping.',
   },
   {
     id: 'gal-fleet-truck-trolley',
-    title: 'Heavy Truck Loading — Bottled Water Pallets & Trolleys',
+    title: 'Truck Loading — Bottled Water from Pallets & Trolleys',
     category: 'Fleet & Logistics',
     imageUrl: '/assets/aistudio/ESS07979_98aff78b.jpg',
-    description: 'Warehouse and truck crew loading shrink-wrapped bottled water packs from wooden pallets and steel trolleys onto our blue fleet truck.',
-  },
-  {
-    id: 'gal-fleet-truck-bay',
-    title: 'Regional Distribution Fleet Loading at Factory Yard',
-    category: 'Fleet & Logistics',
-    imageUrl: '/assets/aistudio/ESS07980_efbc9d24.jpg',
-    description: 'Dual heavy-duty blue Elim distribution trucks staged in the sunny factory courtyard for bulk institutional and wholesale delivery across FCT.',
+    description: 'Loader stacking shrink-wrapped packs of Elim bottled water from a pallet and steel trolley onto one of our blue delivery trucks.',
   },
   {
     id: 'gal-team-01',
-    title: 'Elim Table Water Executive & Plant Staff Team',
+    title: 'Visiting Guests with Elim Table Water Staff',
     category: 'Team & Leadership',
     imageUrl: '/assets/aistudio/productsqw_4491fc0b.jpeg',
-    description: 'Executive management, department supervisors, and field logistics staff assembled outside the Kubwa manufacturing plant.',
+    description: 'Visiting guests and Elim Table Water staff gathered outside the factory during a visit to the plant.',
   },
   {
     id: 'gal-prod-01',
-    title: 'Production Department & Cleanroom Technicians',
+    title: 'Production Department Team',
     category: 'Production Department',
     imageUrl: '/assets/aistudio/productsiyu_44e04553.jpeg',
-    description: 'Cleanroom technicians and automated bottling specialists responsible for reverse osmosis filtration and sterile packaging.',
-  },
-  {
-    id: 'gal-wh-01',
-    title: 'Warehouse & Finished Goods Inventory Team',
-    category: 'Warehouse & Logistics',
-    imageUrl: '/assets/aistudio/products_69cca1f6.jpeg',
-    description: 'Depot supervisors managing climate-controlled finished bottled water stacks, quality release seals, and fleet loading.',
+    description: 'Members of the production department responsible for water treatment, bottling and packaging.',
   },
 ];
 
@@ -303,15 +179,13 @@ const GALLERY_ITEMS: GalleryItem[] = [
 // photos, loading, warehouses with products, and finally production & plant.
 const GALLERY_ORDER = [
   // Offices (by rank)
-  'gal-team-accounts', // Accounts & Commercial Order Desk Supervisor
-  'gal-team-finance', // Finance & Commercial Administration Desk
   'gal-team-office',
-  'gal-team-store',
-  'gal-new-02',
-  'gal-new-11',
-  'gal-new-12',
-  'gal-new-13',
-  'gal-new-14',
+  'gal-team-store', // 1. Store
+  'gal-new-14', // 2. Quality Control & Assurance Supervision
+  'gal-new-13', // 3. Production Manager
+  'gal-new-02', // 4. Warehouse 1
+  'gal-new-11', // 5. Warehouse 2
+  'gal-new-12', // 6. Production 2
   'gal-new-04',
   // Group photos
   'gal-team-mgmt',
@@ -319,35 +193,19 @@ const GALLERY_ORDER = [
   'gal-team-all',
   'gal-team-01',
   'gal-prod-01',
-  'gal-wh-01',
   // Loading
-  'gal-new-03',
-  'gal-fleet-van-sachet',
   'gal-fleet-van-full',
   'gal-fleet-truck-trolley',
-  'gal-fleet-truck-bay',
-  'gal-04',
   'gal-new-08',
   'gal-new-09',
   'gal-new-10',
   // Warehouses with products
-  'gal-new-01',
-  'gal-wh-sachet',
   'gal-prod-sachet',
-  'gal-prod-1500-wide',
   'gal-prod-1500-portrait',
   'gal-prod-19l',
   // Production & plant
-  'gal-new-05',
-  'gal-02',
   'gal-03',
-  'gal-05',
   'gal-bottle-19l-conveyor',
-  'gal-01',
-  'gal-06',
-  'gal-prod-blow-01',
-  'gal-plant-blow-02',
-  'gal-plant-blow-auto',
   'gal-plant-plaque',
 ];
 

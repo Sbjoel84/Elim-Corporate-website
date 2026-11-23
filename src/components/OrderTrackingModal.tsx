@@ -148,7 +148,7 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
               {/* Order Banner */}
               <div className="flex flex-wrap items-center justify-between gap-3 p-4 bg-slate-900 text-white rounded-xl">
                 <div>
-                  <span className="text-[10px] text-cyan-300 uppercase tracking-widest font-semibold block">
+                  <span className="text-[15px] text-cyan-300 uppercase tracking-widest font-semibold block">
                     Verified Booking
                   </span>
                   <span className="text-xl font-black font-mono tracking-wide">
@@ -171,7 +171,7 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
                   >
                     {foundOrder.status.replace(/_/g, ' ')}
                   </span>
-                  <span className="block text-[11px] text-slate-400 mt-1">
+                  <span className="block text-[15px] text-slate-400 mt-1">
                     Booked on {new Date(foundOrder.createdAt).toLocaleDateString()}
                   </span>
                 </div>
@@ -235,7 +235,7 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
                     <div key={it.variantId} className="px-4 py-2.5 flex justify-between items-center">
                       <div>
                         <span className="font-semibold text-slate-900 block">{it.productName}</span>
-                        <span className="text-[11px] text-slate-500">{it.variantName}</span>
+                        <span className="text-[15px] text-slate-500">{it.variantName}</span>
                       </div>
                       <span className="font-bold text-slate-900 bg-slate-100 px-2.5 py-1 rounded-md">
                         {it.quantity} units

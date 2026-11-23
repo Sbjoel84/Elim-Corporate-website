@@ -8,8 +8,8 @@ import type { Product, ProductCategory } from '../../shared/types';
 // Sachet water, the floor-standing dispenser and the hand pump still use the
 // original prototype prices (TODO: confirm before launch).
 
-const BOTTLE_PHOTO = '/assets/aistudio/ESS07910_42d1ee19.jpg';
-const JUG_PHOTO = '/assets/aistudio/ESS07830_fbde1bf0.jpg';
+const BOTTLE_PHOTO = '/assets/aistudio/elim-bottled-water.png';
+const JUG_PHOTO = '/assets/aistudio/elim-dispenser-jar.png';
 const BOTTLED_TEXT = 'Enjoy the convenience of our portable Elim bottled water.';
 const DISPENSER_TEXT = 'Our water for dispensers provides long-lasting refreshment in homes and offices.';
 
@@ -56,7 +56,7 @@ export const LOCAL_CATALOGUE: Product[] = [
     category: 'Sachet Water',
     description:
       'Treated with multi-stage sand, carbon, and micron filtration followed by UV sterilization. Packaged in food-grade film for optimal freshness and daily hydration.',
-    image: '/assets/aistudio/ESS07833_6bee5d2d.jpg',
+    image: '/assets/aistudio/elim-sachet-water.png',
     additionalImages: [
       '/assets/aistudio/ESS07834_eb5d98d0.jpg',
     ],

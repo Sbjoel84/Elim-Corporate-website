@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShoppingCart, Eye, Check, Package, ArrowRight } from 'lucide-react';
 import type { Product, ProductVariant } from '../../shared/types';
+import { minOrderQuantity } from '../../shared/pricing';
 import { AVAILABILITY_BADGE } from '../lib/availability';
 
 interface ProductCardProps {
@@ -17,7 +18,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
     product.variants.find((v) => v.isDefault) || product.variants[0]
   );
-  const [quantity, setQuantity] = useState(1);
+  const minQty = minOrderQuantity(product);
+  const [quantity, setQuantity] = useState(minQty);
   const [addedAnimation, setAddedAnimation] = useState(false);
 
   const stockStatusBadge = AVAILABILITY_BADGE[product.availability] ?? AVAILABILITY_BADGE.IN_STOCK;
@@ -146,7 +148,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <div className="flex items-center border border-[#E1E8F0] rounded-lg bg-[#F5F7FA] shrink-0">
               <button
                 type="button"
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                onClick={() => setQuantity(Math.max(minQty, quantity - 1))}
                 className="px-2.5 py-1.5 text-[#536174] hover:text-[#102A56] text-xs font-bold cursor-pointer"
               >
                 -

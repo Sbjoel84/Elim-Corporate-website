@@ -41,7 +41,7 @@ export const FAQ_DATA: FAQItem[] = [
     category: 'ordering',
     question: 'What is the minimum order quantity (MOQ) for doorstep delivery?',
     answer:
-      'For residential and corporate doorstep delivery within Abuja, our minimum order quantity is 2 refill dispenser jars (18.9L) or 5 packs of bottled/sachet water. Orders of ₦150,000 and above qualify for completely free factory fleet truck delivery across Abuja FCT.',
+      'For residential and corporate doorstep delivery within Abuja, our minimum order quantity is 10 dispenser bottles (19L) or 5 packs of bottled/sachet water. The delivery fee depends on your area and is shown when you book. Orders of ₦150,000 and above get free delivery across Abuja FCT and nearby towns.',
   },
   {
     id: 'order-bottle-swap',

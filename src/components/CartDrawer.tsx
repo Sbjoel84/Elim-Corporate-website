@@ -1,7 +1,13 @@
 import React from 'react';
 import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, Truck, Store, AlertCircle } from 'lucide-react';
 import type { CartItem, DeliveryMethod } from '../../shared/types';
-import { calculateDeliveryFee, FREE_DELIVERY_THRESHOLD } from '../../shared/pricing';
+import {
+  calculateDeliveryFee,
+  findDeliveryZone,
+  FREE_DELIVERY_THRESHOLD,
+  minOrderQuantity,
+} from '../../shared/pricing';
+import { DeliveryZoneSelect } from './DeliveryZoneSelect';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -11,6 +17,8 @@ interface CartDrawerProps {
   onRemoveItem: (productId: string, variantId: string) => void;
   deliveryMethod: DeliveryMethod;
   onChangeDeliveryMethod: (method: DeliveryMethod) => void;
+  deliveryZone: string;
+  onChangeDeliveryZone: (zoneId: string) => void;
   onProceedToCheckout: () => void;
 }
 
@@ -22,12 +30,15 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onRemoveItem,
   deliveryMethod,
   onChangeDeliveryMethod,
+  deliveryZone,
+  onChangeDeliveryZone,
   onProceedToCheckout,
 }) => {
   if (!isOpen) return null;
 
   const subtotal = items.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
-  const deliveryFee = calculateDeliveryFee(subtotal, deliveryMethod);
+  const deliveryFee = calculateDeliveryFee(subtotal, deliveryMethod, deliveryZone);
+  const zone = findDeliveryZone(deliveryZone);
   const total = subtotal + deliveryFee;
 
   return (
@@ -100,8 +111,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         onClick={() =>
                           onUpdateQuantity(item.productId, item.variantId, item.quantity - 1)
                         }
-                        className="p-1 text-[#536174] hover:text-[#102A56] cursor-pointer"
-                        title="Decrease quantity"
+                        disabled={item.quantity <= minOrderQuantity(item)}
+                        className="p-1 text-[#536174] hover:text-[#102A56] cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                        title={
+                          item.quantity <= minOrderQuantity(item)
+                            ? `Minimum order is ${minOrderQuantity(item)}`
+                            : 'Decrease quantity'
+                        }
                       >
                         <Minus className="w-3.5 h-3.5" />
                       </button>
@@ -185,6 +201,20 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               </div>
             </div>
 
+            {deliveryMethod === 'DELIVERY' && (
+              <div>
+                <label htmlFor="cart-zone" className="block text-xs font-semibold text-[#102A56] mb-1">
+                  Delivery area
+                </label>
+                <DeliveryZoneSelect
+                  id="cart-zone"
+                  value={deliveryZone}
+                  onChange={onChangeDeliveryZone}
+                  className="w-full px-3 py-2 text-xs border border-[#E1E8F0] rounded-lg bg-white text-[#102A56] focus:ring-2 focus:ring-[#2563D9] focus:outline-none"
+                />
+              </div>
+            )}
+
             {/* Calculations */}
             <div className="space-y-1.5 text-xs text-[#536174]">
               <div className="flex justify-between">
@@ -197,13 +227,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {deliveryMethod === 'FACTORY_COLLECTION'
                     ? 'Free (Pickup)'
                     : deliveryFee === 0
-                    ? 'FREE (Bulk Order)'
+                    ? 'Free (bulk order)'
                     : `₦${deliveryFee.toLocaleString()}`}
                 </span>
               </div>
-              {deliveryMethod === 'DELIVERY' && subtotal < FREE_DELIVERY_THRESHOLD && (
+              {deliveryMethod === 'DELIVERY' && zone?.freeOver && subtotal < FREE_DELIVERY_THRESHOLD && (
                 <p className="text-[15px] text-[#2563D9]">
-                  💡 Tip: Orders of ₦{FREE_DELIVERY_THRESHOLD.toLocaleString()} and above qualify for free factory fleet delivery!
+                  💡 Tip: Orders of ₦{FREE_DELIVERY_THRESHOLD.toLocaleString()} and above get free delivery to this area!
                 </p>
               )}
               <div className="pt-2 border-t border-[#E1E8F0] flex justify-between text-sm font-bold text-[#102A56]">

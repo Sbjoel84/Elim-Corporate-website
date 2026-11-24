@@ -1,6 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Package, Plus, ShoppingCart, Trash2, X } from 'lucide-react';
-import type { CartItem, Product, ProductVariant } from '../../shared/types';
+import { ArrowRight, Package, Plus, ShoppingCart, Store, Trash2, Truck, X } from 'lucide-react';
+import type { CartItem, DeliveryMethod, Product, ProductVariant } from '../../shared/types';
+import {
+  calculateDeliveryFee,
+  findDeliveryZone,
+  FREE_DELIVERY_THRESHOLD,
+  minOrderQuantity,
+} from '../../shared/pricing';
+import { DeliveryZoneSelect } from './DeliveryZoneSelect';
 
 interface BookOrderModalProps {
   isOpen: boolean;
@@ -12,6 +19,11 @@ interface BookOrderModalProps {
   onAddToCart: (product: Product, variant: ProductVariant, quantity: number) => void;
   /** Close this form and open the checkout (customer details + submit). */
   onContinueToCheckout: () => void;
+  deliveryMethod: DeliveryMethod;
+  onChangeDeliveryMethod: (method: DeliveryMethod) => void;
+  /** Delivery area id (see DELIVERY_ZONES in shared/pricing.ts). */
+  deliveryZone: string;
+  onChangeDeliveryZone: (zoneId: string) => void;
 }
 
 interface OrderLine {
@@ -37,16 +49,20 @@ export const BookOrderModal: React.FC<BookOrderModalProps> = ({
   initialProductId,
   onAddToCart,
   onContinueToCheckout,
+  deliveryMethod,
+  onChangeDeliveryMethod,
+  deliveryZone,
+  onChangeDeliveryZone,
 }) => {
   const nextKey = useRef(1);
   const [lines, setLines] = useState<OrderLine[]>([]);
 
-  const newLine = (productId?: string): OrderLine => ({
-    key: nextKey.current++,
-    productId: productId ?? products[0]?.id ?? '',
-    variantId: '',
-    quantity: 1,
-  });
+  const minFor = (productId: string) => minOrderQuantity(products.find((p) => p.id === productId));
+
+  const newLine = (productId?: string): OrderLine => {
+    const id = productId ?? products[0]?.id ?? '';
+    return { key: nextKey.current++, productId: id, variantId: '', quantity: minFor(id) };
+  };
 
   // Reset the form each time it opens.
   useEffect(() => {
@@ -86,10 +102,14 @@ export const BookOrderModal: React.FC<BookOrderModalProps> = ({
 
   const cartTotal = cartItems.reduce((sum, i) => sum + i.unitPrice * i.quantity, 0);
 
+  const subtotal = selectionTotal + cartTotal;
+  const deliveryFee = calculateDeliveryFee(subtotal, deliveryMethod, deliveryZone);
+  const zone = findDeliveryZone(deliveryZone);
+
   const handleContinue = () => {
     lines.forEach((l) => {
       const { product, variant } = resolve(l);
-      if (product && variant && l.quantity > 0) onAddToCart(product, variant, l.quantity);
+      if (product && variant) onAddToCart(product, variant, Math.max(l.quantity, minOrderQuantity(product)));
     });
     onContinueToCheckout();
   };
@@ -179,7 +199,13 @@ export const BookOrderModal: React.FC<BookOrderModalProps> = ({
                           <select
                             id={`${id}-product`}
                             value={product?.id}
-                            onChange={(e) => updateLine(line.key, { productId: e.target.value, variantId: '' })}
+                            onChange={(e) =>
+                              updateLine(line.key, {
+                                productId: e.target.value,
+                                variantId: '',
+                                quantity: Math.max(line.quantity, minFor(e.target.value)),
+                              })
+                            }
                             className={inputClass}
                           >
                             {products.map((p) => (
@@ -213,13 +239,20 @@ export const BookOrderModal: React.FC<BookOrderModalProps> = ({
                           <input
                             id={`${id}-qty`}
                             type="number"
-                            min={1}
-                            value={line.quantity}
-                            onChange={(e) =>
-                              updateLine(line.key, { quantity: Math.max(1, parseInt(e.target.value, 10) || 1) })
+                            min={minOrderQuantity(product)}
+                            value={line.quantity || ''}
+                            onChange={(e) => updateLine(line.key, { quantity: parseInt(e.target.value, 10) || 0 })}
+                            onBlur={() =>
+                              updateLine(line.key, { quantity: Math.max(line.quantity, minOrderQuantity(product)) })
                             }
+                            aria-describedby={minOrderQuantity(product) > 1 ? `${id}-min` : undefined}
                             className={inputClass}
                           />
+                          {minOrderQuantity(product) > 1 && (
+                            <p id={`${id}-min`} className="mt-1 text-[11px] text-[#536174]">
+                              Min. {minOrderQuantity(product)}
+                            </p>
+                          )}
                         </div>
                       </div>
                     </li>
@@ -227,11 +260,73 @@ export const BookOrderModal: React.FC<BookOrderModalProps> = ({
                 })}
               </ul>
 
-              <div className="flex items-center justify-between bg-[#F5F7FA] border border-[#E1E8F0] rounded-xl px-4 py-3">
-                <span className="text-xs text-[#536174]">
-                  Total for {lines.length} {lines.length === 1 ? 'item' : 'items'}
-                </span>
-                <span className="font-bold text-[#102A56]">₦{selectionTotal.toLocaleString()}</span>
+              <div className="space-y-3 pt-1">
+                <h4 className="text-xs font-semibold uppercase tracking-wide text-[#102A56]">Delivery</h4>
+                <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Delivery method">
+                  {(
+                    [
+                      { method: 'DELIVERY', label: 'Deliver to me', Icon: Truck },
+                      { method: 'FACTORY_COLLECTION', label: 'Collect from factory', Icon: Store },
+                    ] as const
+                  ).map(({ method, label, Icon }) => (
+                    <button
+                      key={method}
+                      type="button"
+                      role="radio"
+                      aria-checked={deliveryMethod === method}
+                      onClick={() => onChangeDeliveryMethod(method)}
+                      className={`flex items-center gap-2 p-2.5 rounded-lg border text-left text-xs transition cursor-pointer ${
+                        deliveryMethod === method
+                          ? 'border-[#2563D9] bg-[#EAF4FF] text-[#102A56] font-semibold'
+                          : 'border-[#E1E8F0] bg-white text-[#536174] hover:bg-slate-50'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4 text-[#2563D9] shrink-0" />
+                      {label}
+                    </button>
+                  ))}
+                </div>
+
+                {deliveryMethod === 'DELIVERY' ? (
+                  <div>
+                    <label htmlFor="bo-zone" className="block text-xs font-semibold text-[#102A56] mb-1">
+                      Delivery area
+                    </label>
+                    <DeliveryZoneSelect
+                      id="bo-zone"
+                      value={deliveryZone}
+                      onChange={onChangeDeliveryZone}
+                      className={inputClass}
+                    />
+                    {zone?.freeOver && subtotal < FREE_DELIVERY_THRESHOLD && (
+                      <p className="mt-1 text-[11px] text-[#536174]">
+                        Free delivery to this area on orders of ₦{FREE_DELIVERY_THRESHOLD.toLocaleString()} and above.
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-xs text-[#536174]">Pick up from our factory in Kubwa, Abuja. No delivery fee.</p>
+                )}
+              </div>
+
+              <div className="bg-[#F5F7FA] border border-[#E1E8F0] rounded-xl px-4 py-3 space-y-1.5 text-xs">
+                <div className="flex justify-between text-[#536174]">
+                  <span>
+                    Products ({lines.length} {lines.length === 1 ? 'item' : 'items'}
+                    {cartItems.length > 0 ? ' + booking so far' : ''})
+                  </span>
+                  <span className="font-semibold text-[#102A56]">₦{subtotal.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between text-[#536174]">
+                  <span>Delivery fee</span>
+                  <span className="font-semibold text-[#102A56]">
+                    {deliveryFee === 0 ? 'Free' : `₦${deliveryFee.toLocaleString()}`}
+                  </span>
+                </div>
+                <div className="pt-1.5 border-t border-[#E1E8F0] flex justify-between text-sm font-bold text-[#102A56]">
+                  <span>Estimated total</span>
+                  <span className="text-[#2563D9]">₦{(subtotal + deliveryFee).toLocaleString()}</span>
+                </div>
               </div>
 
               {cartItems.length > 0 && (

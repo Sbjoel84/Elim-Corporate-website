@@ -1,5 +1,11 @@
 import type { CustomerInfo, InquiryRequest, InquiryType, OrderItem, Product } from '../shared/types';
-import { calculateDeliveryFee, DELIVERY_STATES, FACTORY_ADDRESS } from '../shared/pricing';
+import {
+  calculateDeliveryFee,
+  DELIVERY_STATES,
+  FACTORY_ADDRESS,
+  findDeliveryZone,
+  minOrderQuantity,
+} from '../shared/pricing';
 import type { ValidatedOrder } from './erp/adapter';
 
 export class ValidationError extends Error {}
@@ -49,7 +55,12 @@ export function validateOrder(body: any, catalogue: Product[]): ValidatedOrder {
     throw new ValidationError('Choose delivery or factory collection.');
   }
 
-  const state = str(c.state, 'State', { required: true, max: 50 });
+  const isDelivery = deliveryMethod === 'DELIVERY';
+
+  // For delivery, the area decides both the state and the delivery fee.
+  const zone = isDelivery ? findDeliveryZone(c.deliveryZone) : undefined;
+  if (isDelivery && !zone) throw new ValidationError('Choose your delivery area.');
+  const state = zone ? zone.state : str(c.state, 'State', { max: 50 }) || 'Abuja';
   if (!STATES.includes(state)) throw new ValidationError('We do not deliver to the selected state yet.');
 
   const preferredDeliveryDate = str(c.preferredDeliveryDate, 'Preferred date', { required: true, max: 10 });
@@ -58,7 +69,6 @@ export function validateOrder(body: any, catalogue: Product[]): ValidatedOrder {
   }
   if (preferredDeliveryDate < today()) throw new ValidationError('Preferred date cannot be in the past.');
 
-  const isDelivery = deliveryMethod === 'DELIVERY';
   const customer: CustomerInfo = {
     fullName: str(c.fullName, 'Full name', { required: true, max: 120 }),
     phoneNumber: phone(c.phoneNumber),
@@ -72,6 +82,7 @@ export function validateOrder(body: any, catalogue: Product[]): ValidatedOrder {
     preferredDeliveryDate,
     preferredDeliveryWindow: str(c.preferredDeliveryWindow, 'Time window', { max: 60 }) || undefined,
     deliveryMethod,
+    deliveryZone: zone?.id,
     specialInstructions: str(c.specialInstructions, 'Special instructions', { max: 1000 }) || undefined,
   };
 
@@ -90,6 +101,10 @@ export function validateOrder(body: any, catalogue: Product[]): ValidatedOrder {
     if (!Number.isInteger(quantity) || quantity < 1 || quantity > MAX_QTY) {
       throw new ValidationError(`Invalid quantity for ${product.name}.`);
     }
+    const min = minOrderQuantity(product);
+    if (quantity < min) {
+      throw new ValidationError(`The minimum order for ${product.name} is ${min}.`);
+    }
     // Price always comes from the catalogue, never from the browser.
     return {
       productId: product.id,
@@ -104,7 +119,7 @@ export function validateOrder(body: any, catalogue: Product[]): ValidatedOrder {
   });
 
   const subtotal = items.reduce((sum, i) => sum + i.totalPrice, 0);
-  const deliveryFee = calculateDeliveryFee(subtotal, deliveryMethod);
+  const deliveryFee = calculateDeliveryFee(subtotal, deliveryMethod, zone?.id);
   return { customer, items, subtotal, deliveryFee, totalAmount: subtotal + deliveryFee };
 }
 

@@ -10,6 +10,8 @@ import type { Product, ProductCategory } from '../../shared/types';
 
 const BOTTLE_PHOTO = '/assets/aistudio/elim-bottled-water.png';
 const JUG_PHOTO = '/assets/aistudio/elim-dispenser-jar.png';
+/** Smallest number of dispenser bottles (19L jugs) per order line. */
+const DISPENSER_MIN_QTY = 10;
 const BOTTLED_TEXT = 'Enjoy the convenience of our portable Elim bottled water.';
 const DISPENSER_TEXT = 'Our water for dispensers provides long-lasting refreshment in homes and offices.';
 
@@ -22,7 +24,8 @@ function priceListItem(
   unit: string,
   price: number,
   image: string,
-  description: string
+  description: string,
+  minOrderQuantity?: number
 ): Product {
   return {
     id,
@@ -36,6 +39,9 @@ function priceListItem(
     ],
     availability: 'IN_STOCK',
     featured: true,
+    ...(minOrderQuantity
+      ? { minOrderQuantity, orderingNotes: `Minimum order: ${minOrderQuantity} bottles.` }
+      : {}),
   };
 }
 
@@ -46,9 +52,9 @@ export const LOCAL_CATALOGUE: Product[] = [
   priceListItem('prod-bottle-350', 'ELM-BTL-35CL', '35cl Bottled Water', 'Bottled Water', 'Pack', 2550, BOTTLE_PHOTO, BOTTLED_TEXT),
   priceListItem('prod-bottle-500', 'ELM-BTL-50CL', '50cl Bottled Water', 'Bottled Water', 'Pack', 2650, BOTTLE_PHOTO, BOTTLED_TEXT),
   priceListItem('prod-bottle-750', 'ELM-BTL-75CL', '75cl Bottled Water', 'Bottled Water', 'Pack', 1700, BOTTLE_PHOTO, BOTTLED_TEXT),
-  priceListItem('prod-empty-jug', 'ELM-DSP-JUG', 'Empty Jug', 'Dispenser Water', 'Bottle', 3000, JUG_PHOTO, DISPENSER_TEXT),
-  priceListItem('prod-dispenser-19l', 'ELM-DSP-JUGW', 'Jug + Water', 'Dispenser Water', 'Bottle', 4200, JUG_PHOTO, DISPENSER_TEXT),
-  priceListItem('prod-dispenser-refill', 'ELM-DSP-REFILL', 'Dispenser Water', 'Dispenser Water', 'Bottle', 1200, JUG_PHOTO, DISPENSER_TEXT),
+  priceListItem('prod-empty-jug', 'ELM-DSP-JUG', 'Empty Jug', 'Dispenser Water', 'Bottle', 3000, JUG_PHOTO, DISPENSER_TEXT, DISPENSER_MIN_QTY),
+  priceListItem('prod-dispenser-19l', 'ELM-DSP-JUGW', 'Jug + Water', 'Dispenser Water', 'Bottle', 4200, JUG_PHOTO, DISPENSER_TEXT, DISPENSER_MIN_QTY),
+  priceListItem('prod-dispenser-refill', 'ELM-DSP-REFILL', 'Dispenser Water', 'Dispenser Water', 'Bottle', 1200, JUG_PHOTO, DISPENSER_TEXT, DISPENSER_MIN_QTY),
   {
     id: 'prod-sachet-01',
     sku: 'ELM-SCH-50CL',

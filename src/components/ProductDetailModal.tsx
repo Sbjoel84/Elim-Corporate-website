@@ -12,6 +12,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import type { Product, ProductVariant } from '../../shared/types';
+import { minOrderQuantity } from '../../shared/pricing';
 import { AVAILABILITY_BADGE } from '../lib/availability';
 
 interface ProductDetailModalProps {
@@ -31,7 +32,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     product.variants.find((v) => v.isDefault) || product.variants[0]
   );
   const [selectedImage, setSelectedImage] = useState<string>(product.image);
-  const [quantity, setQuantity] = useState(1);
+  const minQty = minOrderQuantity(product);
+  const [quantity, setQuantity] = useState(minQty);
   const [added, setAdded] = useState(false);
 
   const availability = AVAILABILITY_BADGE[product.availability] ?? AVAILABILITY_BADGE.IN_STOCK;
@@ -198,7 +200,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 <div className="flex items-center border border-[#E1E8F0] rounded-lg bg-[#F5F7FA]">
                   <button
                     type="button"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    onClick={() => setQuantity(Math.max(minQty, quantity - 1))}
                     className="px-3 py-2 text-[#536174] hover:text-[#102A56] font-bold cursor-pointer"
                   >
                     -

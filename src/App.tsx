@@ -1,6 +1,7 @@
 import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router';
 import type { CartItem, DeliveryMethod, Product, ProductVariant } from '../shared/types';
+import { DEFAULT_DELIVERY_ZONE_ID, minOrderQuantity } from '../shared/pricing';
 import { api } from './lib/api';
 import { PAGES, pathForPage, pageForPath } from './lib/pages';
 
@@ -65,6 +66,7 @@ export default function App() {
   // Cart (remembered in this browser only)
   const [cartItems, setCartItems] = useState<CartItem[]>(loadCart);
   const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>('DELIVERY');
+  const [deliveryZone, setDeliveryZone] = useState(DEFAULT_DELIVERY_ZONE_ID);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
@@ -81,10 +83,11 @@ export default function App() {
     if (products.length === 0) return;
     setCartItems((prev) =>
       prev.flatMap((item) => {
-        const variant = products
-          .find((p) => p.id === item.productId)
-          ?.variants.find((v) => v.id === item.variantId);
-        return variant ? [{ ...item, unitPrice: variant.price }] : [];
+        const product = products.find((p) => p.id === item.productId);
+        const variant = product?.variants.find((v) => v.id === item.variantId);
+        if (!variant) return [];
+        const min = minOrderQuantity(product);
+        return [{ ...item, unitPrice: variant.price, minOrderQuantity: min, quantity: Math.max(item.quantity, min) }];
       })
     );
   }, [products]);
@@ -110,17 +113,19 @@ export default function App() {
       if (existing) {
         return prev.map((i) => (i === existing ? { ...i, quantity: i.quantity + quantity } : i));
       }
+      const min = minOrderQuantity(product);
       return [
         ...prev,
         {
           productId: product.id,
           variantId: variant.id,
-          quantity,
+          quantity: Math.max(quantity, min),
           unitPrice: variant.price,
           productName: product.name,
           variantName: variant.name,
           packaging: variant.packaging,
           image: product.image,
+          minOrderQuantity: min,
         },
       ];
     });
@@ -134,7 +139,11 @@ export default function App() {
   const handleUpdateCartQty = (productId: string, variantId: string, newQty: number) => {
     if (newQty <= 0) return handleRemoveCartItem(productId, variantId);
     setCartItems((prev) =>
-      prev.map((i) => (i.productId === productId && i.variantId === variantId ? { ...i, quantity: newQty } : i))
+      prev.map((i) =>
+        i.productId === productId && i.variantId === variantId
+          ? { ...i, quantity: Math.max(newQty, minOrderQuantity(i)) }
+          : i
+      )
     );
   };
 
@@ -197,6 +206,10 @@ export default function App() {
           cartItems={cartItems}
           initialProductId={bookOrderProductId}
           onAddToCart={(p, v, q) => handleAddToCart(p, v, q, false)}
+          deliveryMethod={deliveryMethod}
+          onChangeDeliveryMethod={setDeliveryMethod}
+          deliveryZone={deliveryZone}
+          onChangeDeliveryZone={setDeliveryZone}
           onContinueToCheckout={() => {
             setIsBookOrderOpen(false);
             setIsCheckoutOpen(true);
@@ -211,6 +224,8 @@ export default function App() {
           onRemoveItem={handleRemoveCartItem}
           deliveryMethod={deliveryMethod}
           onChangeDeliveryMethod={setDeliveryMethod}
+          deliveryZone={deliveryZone}
+          onChangeDeliveryZone={setDeliveryZone}
           onProceedToCheckout={() => {
             setIsCartOpen(false);
             setIsCheckoutOpen(true);
@@ -222,6 +237,8 @@ export default function App() {
           onClose={() => setIsCheckoutOpen(false)}
           items={cartItems}
           deliveryMethod={deliveryMethod}
+          deliveryZone={deliveryZone}
+          onChangeDeliveryZone={setDeliveryZone}
           onOrderCompleted={() => setCartItems([])}
           onTrackOrder={(ref, phone) => {
             setTrackingInitialRef(ref);

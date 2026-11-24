@@ -40,6 +40,8 @@ export interface Product {
   phLevel?: string;
   tdsLevel?: string;
   orderingNotes?: string;
+  /** Smallest quantity a customer may order of each pack size (default 1). */
+  minOrderQuantity?: number;
 }
 
 export interface CartItem {
@@ -51,6 +53,8 @@ export interface CartItem {
   variantName: string;
   packaging: string;
   image: string;
+  /** Copied from the product so the cart can enforce it. */
+  minOrderQuantity?: number;
 }
 
 export interface CustomerInfo {
@@ -64,6 +68,8 @@ export interface CustomerInfo {
   preferredDeliveryDate: string;
   preferredDeliveryWindow?: string;
   deliveryMethod: DeliveryMethod;
+  /** Delivery area id from shared/pricing.ts DELIVERY_ZONES (delivery orders only). */
+  deliveryZone?: string;
   specialInstructions?: string;
 }
 

@@ -18,7 +18,8 @@ import {
   Send,
 } from 'lucide-react';
 import type { CartItem, CustomerInfo, DeliveryMethod, PublicOrder } from '../../shared/types';
-import { calculateDeliveryFee, DELIVERY_STATES, FACTORY_ADDRESS } from '../../shared/pricing';
+import { calculateDeliveryFee, FACTORY_ADDRESS, findDeliveryZone } from '../../shared/pricing';
+import { DeliveryZoneSelect } from './DeliveryZoneSelect';
 import { api, ApiError } from '../lib/api';
 
 interface CheckoutModalProps {
@@ -26,6 +27,8 @@ interface CheckoutModalProps {
   onClose: () => void;
   items: CartItem[];
   deliveryMethod: DeliveryMethod;
+  deliveryZone: string;
+  onChangeDeliveryZone: (zoneId: string) => void;
   onOrderCompleted: (order: PublicOrder) => void;
   onTrackOrder: (orderRef: string, phone: string) => void;
 }
@@ -35,6 +38,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   onClose,
   items,
   deliveryMethod,
+  deliveryZone,
+  onChangeDeliveryZone,
   onOrderCompleted,
   onTrackOrder,
 }) => {
@@ -61,7 +66,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   // Estimate only: the server recalculates prices and fees from the catalogue.
   const subtotal = items.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
-  const deliveryFee = calculateDeliveryFee(subtotal, deliveryMethod);
+  const deliveryFee = calculateDeliveryFee(subtotal, deliveryMethod, deliveryZone);
   const totalAmount = subtotal + deliveryFee;
   const todayIso = new Date().toISOString().split('T')[0];
 
@@ -95,7 +100,12 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     setIsSubmitting(true);
     try {
       const order = await api.createOrder({
-        customer: { ...formData, deliveryMethod },
+        customer: {
+          ...formData,
+          deliveryMethod,
+          deliveryZone,
+          state: findDeliveryZone(deliveryZone)?.state ?? formData.state,
+        },
         items: items.map((i) => ({ productId: i.productId, variantId: i.variantId, quantity: i.quantity })),
       });
       setCompletedOrder(order);
@@ -217,6 +227,12 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     </span>
                   </div>
                 ))}
+                <div className="flex justify-between text-slate-600">
+                  <span>Delivery fee</span>
+                  <span className="font-semibold text-slate-900">
+                    {completedOrder.deliveryFee === 0 ? 'Free' : `₦${completedOrder.deliveryFee.toLocaleString()}`}
+                  </span>
+                </div>
                 <div className="pt-2 border-t border-slate-200 flex justify-between font-bold text-sm text-slate-900">
                   <span>Total Booking Value:</span>
                   <span className="text-cyan-700">₦{completedOrder.totalAmount.toLocaleString()}</span>
@@ -392,25 +408,21 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                           required
                           value={formData.cityArea}
                           onChange={handleInputChange}
-                          placeholder="e.g. Victoria Island, Ikeja, Lekki Phase 1"
+                          placeholder="e.g. Kubwa Phase 4, Wuse 2, Gwarinpa 3rd Ave"
                           className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">State</label>
-                        <select
-                          name="state"
-                          value={formData.state}
-                          onChange={handleInputChange}
+                        <label htmlFor="co-zone" className="block text-xs font-medium text-slate-700 mb-1">
+                          Delivery Area <span className="text-rose-500">*</span>
+                        </label>
+                        <DeliveryZoneSelect
+                          id="co-zone"
+                          value={deliveryZone}
+                          onChange={onChangeDeliveryZone}
                           className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none bg-white"
-                        >
-                          {DELIVERY_STATES.map((st) => (
-                            <option key={st.value} value={st.value}>
-                              {st.label}
-                            </option>
-                          ))}
-                        </select>
+                        />
                       </div>
                     </div>
                   </div>
@@ -480,7 +492,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   <span className="font-semibold text-slate-900">₦{subtotal.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-slate-600">
-                  <span>Delivery ({deliveryMethod === 'DELIVERY' ? 'Fleet' : 'Pickup'}):</span>
+                  <span>
+                    Delivery (
+                    {deliveryMethod === 'DELIVERY' ? findDeliveryZone(deliveryZone)?.label ?? 'Fleet' : 'Pickup'}):
+                  </span>
                   <span className="font-semibold text-slate-900">
                     {deliveryFee === 0 ? 'Free' : `₦${deliveryFee.toLocaleString()}`}
                   </span>

@@ -23,6 +23,24 @@ npm start                # serves both on PORT
 
 `npm run lint` type-checks the whole project.
 
+## Deploying on Render
+
+The repository includes a Render Blueprint (`render.yaml`) that sets up one web service for the website and API.
+
+1. Push the code to GitHub (`main` branch).
+2. In Render: **New + → Blueprint**, connect the GitHub repository, and apply. Render reads `render.yaml`:
+   - Build: `npm ci --include=dev && npm run build`
+   - Start: `npm start` (Render supplies `PORT`)
+   - Health check: `/healthz`
+   - Node version: from `.node-version` (22)
+   - Region: Frankfurt, plan: Starter, with a 1 GB disk at `/var/data` for saved bookings and enquiries
+3. When Render asks for `SITE_URL`, enter the public address (e.g. `https://www.elimwater.com`, no trailing slash). You can leave it blank at first and set it later under **Environment**.
+4. To use your own domain: **Settings → Custom Domains** in the Render service, then add the DNS records Render shows.
+
+Every push to `main` redeploys automatically.
+
+**Free plan:** it works for previews, but the site sleeps after 15 minutes without visitors, and it cannot have a disk, so bookings saved by the local adapter are lost on every deploy or restart. To use it, change `plan: starter` to `plan: free` and delete the `disk:` block and the `DATA_DIR` entry in `render.yaml`.
+
 ## How it fits together
 
 ```

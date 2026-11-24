@@ -1,0 +1,38 @@
+# Render Blueprint for the Elim Water website (website + API in one Node service).
+# In Render: New + > Blueprint > pick this repository. Render reads this file.
+services:
+  - type: web
+    name: elim-water-website
+    runtime: node
+    # Frankfurt is the closest Render region to Nigeria.
+    region: frankfurt
+    # "free" sleeps after 15 minutes without visitors (first visit then takes ~1 minute)
+    # and cannot keep files between deploys. Use "starter" or higher for the live site.
+    plan: starter
+    branch: main
+    autoDeploy: true
+    # --include=dev: Vite, Tailwind and esbuild are needed to build, even with NODE_ENV=production.
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Render sits behind a load balancer; this lets rate limiting see real visitor IPs.
+      - key: TRUST_PROXY
+        value: "true"
+      - key: ERP_ADAPTER
+        value: local
+      # Bookings and enquiries are saved here by the local adapter (see disk below).
+      - key: DATA_DIR
+        value: /var/data
+      # Public address of the site, used in sitemap.xml (no trailing slash).
+      # Set it in the Render dashboard once the domain is known, e.g. https://www.elimwater.com
+      - key: SITE_URL
+        sync: false
+    # Keeps saved bookings/enquiries across deploys and restarts (needs a paid plan).
+    # Remove this block if you deploy on the free plan, and also remove DATA_DIR above.
+    disk:
+      name: elim-data
+      mountPath: /var/data
+      sizeGB: 1

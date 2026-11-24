@@ -106,6 +106,11 @@ api.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
 
 app.use('/api', api);
 
+// Health check for the hosting platform (Render's healthCheckPath).
+app.get('/healthz', (_req, res) => {
+  res.set('Cache-Control', 'no-store').json({ ok: true });
+});
+
 // --- Search engines -------------------------------------------------------
 // SITE_URL (e.g. https://www.elimwater.com) makes sitemap links absolute and stable.
 function siteUrl(req: Request): string {
@@ -191,6 +196,17 @@ async function start() {
     httpServer.listen(p);
   };
   tryListen(port);
+
+  // Hosting platforms (Render, Docker) send SIGTERM before replacing the server
+  // on a new deploy: finish in-flight requests, then exit.
+  const shutdown = (signal: string) => {
+    console.log(`${signal} received, shutting down...`);
+    httpServer.close(() => process.exit(0));
+    httpServer.closeIdleConnections();
+    setTimeout(() => process.exit(0), 10_000).unref();
+  };
+  process.once('SIGTERM', () => shutdown('SIGTERM'));
+  process.once('SIGINT', () => shutdown('SIGINT'));
 }
 
 /** Prints the clickable links, Vite-style, so they are easy to spot. */

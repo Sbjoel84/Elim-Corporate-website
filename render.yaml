@@ -1,8 +1,8 @@
-# Render Blueprint for the Elim Water website (website + API in one Node service).
+﻿# Render Blueprint for the Elim Water website (website + API in one Node service).
 # In Render: New + > Blueprint > pick this repository. Render reads this file.
 services:
   - type: web
-    name: elim-water-website
+    name: elim-corporate-website
     runtime: node
     # Frankfurt is the closest Render region to Nigeria.
     region: frankfurt

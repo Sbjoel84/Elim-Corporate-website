@@ -1,4 +1,4 @@
-﻿# Render Blueprint for the Elim Water website (website + API in one Node service).
+# Render Blueprint for the Elim Water website (website + API in one Node service).
 # In Render: New + > Blueprint > pick this repository. Render reads this file.
 services:
   - type: web
